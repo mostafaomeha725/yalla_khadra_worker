@@ -1,0 +1,60 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yallakhadra/core/theme/styles.dart';
+import 'package:yallakhadra/core/utils/spacing.dart';
+import 'package:yallakhadra/core/widgets/custom_text.dart';
+import 'package:yallakhadra/features/home/domain/entities/home_dashboard_entity.dart';
+import 'package:yallakhadra/features/home/presentation/widgets/home_current_cleanup_section.dart';
+import 'package:yallakhadra/features/home/presentation/widgets/home_nearby_reports_section.dart';
+import 'package:yallakhadra/features/home/presentation/widgets/home_overview_section.dart';
+import 'package:yallakhadra/features/home/presentation/widgets/home_welcome_banner.dart';
+
+class HomeDashboardContent extends StatelessWidget {
+  final HomeDashboardEntity? dashboard;
+  final String? errorMessage;
+
+  const HomeDashboardContent({super.key, required this.dashboard})
+    : errorMessage = null;
+
+  const HomeDashboardContent.error({super.key, required String message})
+    : dashboard = null,
+      errorMessage = message;
+
+  @override
+  Widget build(BuildContext context) {
+    if (errorMessage != null) {
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: AppText(
+            errorMessage!,
+            textAlign: TextAlign.center,
+            style: font16w500.copyWith(color: const Color(0xFF475569)),
+          ),
+        ),
+      );
+    }
+
+    final HomeDashboardEntity data = dashboard!;
+
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 14.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          HomeWelcomeBanner(workerName: data.workerName),
+          verticalSpacing(24),
+          HomeOverviewSection(
+            avgMinutes: data.avgMinutes,
+            completedCount: data.completedCount,
+          ),
+          verticalSpacing(36),
+          HomeCurrentCleanupSection(task: data.currentCleanup),
+          verticalSpacing(36),
+          HomeNearbyReportsSection(reports: data.nearbyReports),
+          verticalSpacing(92),
+        ],
+      ),
+    );
+  }
+}
