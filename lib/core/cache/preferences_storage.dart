@@ -48,6 +48,18 @@ class PreferencesStorage {
     await _preferences.remove(PreferencesKeys.userToken.name);
   }
 
+  Future<void> saveRefreshToken(String token) async {
+    await _preferences.setString(PreferencesKeys.refreshToken.name, token);
+  }
+
+  String? getRefreshToken() {
+    return _preferences.getString(PreferencesKeys.refreshToken.name);
+  }
+
+  Future<void> deleteRefreshToken() async {
+    await _preferences.remove(PreferencesKeys.refreshToken.name);
+  }
+
   /// ================= LANGUAGE =================
   String getCurrentLanguage() {
     return _preferences.getString(PreferencesKeys.currentLanguage.name) ?? "en";

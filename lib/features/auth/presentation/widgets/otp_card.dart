@@ -8,7 +8,9 @@ import 'package:yallakhadra/features/auth/presentation/constants/auth_strings.da
 import 'package:yallakhadra/features/auth/presentation/widgets/otp_form_section.dart';
 
 class OtpCard extends StatelessWidget {
-  const OtpCard({super.key});
+  const OtpCard({required this.email, super.key});
+
+  final String email;
 
   @override
   Widget build(BuildContext context) {
@@ -65,12 +67,12 @@ class OtpCard extends StatelessWidget {
           ),
           verticalSpacing(4),
           AppText(
-            AuthStrings.otpTargetEmail,
+            email.isEmpty ? AuthStrings.otpTargetEmail : email,
             alignment: AlignmentDirectional.center,
             style: font16w500.copyWith(color: AppColors.authHeading),
           ),
           verticalSpacing(20),
-          const OtpFormSection(),
+          OtpFormSection(email: email),
         ],
       ),
     );

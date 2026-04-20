@@ -6,6 +6,7 @@ import 'package:yallakhadra/core/widgets/custom_text.dart';
 class AiScanActionCard extends StatelessWidget {
   const AiScanActionCard({
     super.key,
+    required this.onPressed,
     required this.icon,
     required this.title,
     required this.subtitle,
@@ -25,6 +26,7 @@ class AiScanActionCard extends StatelessWidget {
   });
 
   final IconData icon;
+  final VoidCallback onPressed;
   final String title;
   final String subtitle;
   final Color backgroundColor;
@@ -44,7 +46,7 @@ class AiScanActionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BounceIt(
-      onPressed: () {},
+      onPressed: onPressed,
       child: Container(
         width: double.infinity,
         constraints: height == null ? null : BoxConstraints(minHeight: height!),

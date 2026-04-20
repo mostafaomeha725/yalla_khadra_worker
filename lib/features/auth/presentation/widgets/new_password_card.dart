@@ -8,7 +8,10 @@ import 'package:yallakhadra/features/auth/presentation/constants/auth_strings.da
 import 'package:yallakhadra/features/auth/presentation/widgets/new_password_form_section.dart';
 
 class NewPasswordCard extends StatelessWidget {
-  const NewPasswordCard({super.key});
+  const NewPasswordCard({required this.email, required this.code, super.key});
+
+  final String email;
+  final String code;
 
   @override
   Widget build(BuildContext context) {
@@ -65,12 +68,12 @@ class NewPasswordCard extends StatelessWidget {
           ),
           verticalSpacing(4),
           AppText(
-            AuthStrings.newPasswordTargetEmail,
+            email.isEmpty ? AuthStrings.newPasswordTargetEmail : email,
             alignment: AlignmentDirectional.center,
             style: font16w500.copyWith(color: AppColors.authHeading),
           ),
           verticalSpacing(18),
-          const NewPasswordFormSection(),
+          NewPasswordFormSection(email: email, code: code),
         ],
       ),
     );

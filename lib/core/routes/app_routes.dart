@@ -23,7 +23,7 @@ final CustomGoRouterObserver customGoRouterObserver = CustomGoRouterObserver();
 
 GoRouter createRouter() {
   return GoRouter(
-    initialLocation: Routes.loginScreen,
+    initialLocation: Routes.mainNavigationScreen,
     navigatorKey: navigatorKey,
     debugLogDiagnostics: true,
     observers: [
@@ -41,11 +41,24 @@ GoRouter createRouter() {
       ),
       GoRoute(
         path: Routes.otpScreen,
-        builder: (context, state) => const OtpScreen(),
+        builder: (context, state) {
+          final String email = state.extra is String
+              ? state.extra as String
+              : '';
+          return OtpScreen(email: email);
+        },
       ),
       GoRoute(
         path: Routes.newPasswordScreen,
-        builder: (context, state) => const NewPasswordScreen(),
+        builder: (context, state) {
+          final Map<String, dynamic> payload =
+              state.extra is Map<String, dynamic>
+              ? state.extra! as Map<String, dynamic>
+              : const <String, dynamic>{};
+          final String email = payload['email'] as String? ?? '';
+          final String code = payload['code'] as String? ?? '';
+          return NewPasswordScreen(email: email, code: code);
+        },
       ),
       GoRoute(
         path: Routes.profileScreen,

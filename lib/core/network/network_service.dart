@@ -32,7 +32,7 @@ class NetworkService {
   }
 
   void addInterceptors() {
-    dio.interceptors.add(AuthorizationInterceptor());
+    dio.interceptors.add(AuthorizationInterceptor(dio));
 
     // if (isDevEnviroment()) {
     dio.interceptors.add(ChuckerDioInterceptor());
@@ -245,7 +245,7 @@ class NetworkService {
       return const Left("Format Exception");
     } on DioException catch (e) {
       if (e.type == DioExceptionType.badResponse) {
-        return Left(e.response!.data['message']);
+        return Left(_extractErrorMessage(e.response?.data));
         // return Left(_l)(e.message);
       } else if (e.type == DioExceptionType.connectionTimeout) {
         // safePrint('check your connection');
@@ -280,7 +280,7 @@ class NetworkService {
       return const Left("Format Exception");
     } on DioException catch (e) {
       if (e.type == DioExceptionType.badResponse) {
-        return Left(e.response!.data['message']);
+        return Left(_extractErrorMessage(e.response?.data));
         // return Left(_l)(e.message);
       } else if (e.type == DioExceptionType.connectionTimeout) {
         // safePrint('check your connection');
@@ -332,7 +332,7 @@ class NetworkService {
 
   Left<Failure, dynamic> handleDioExceoptions(DioException e) {
     if (e.type == DioExceptionType.badResponse) {
-      return Left(Failure(e.response!.data['message'].toString()));
+      return Left(Failure(_extractErrorMessage(e.response?.data)));
     } else if (e.type == DioExceptionType.connectionTimeout) {
       return const Left(Failure("Check your connection"));
     } else if (e.type == DioExceptionType.receiveTimeout) {
@@ -340,6 +340,47 @@ class NetworkService {
     } else {
       return Left(Failure(e.message ?? ""));
     }
+  }
+
+  String _extractErrorMessage(dynamic data) {
+    if (data is String && data.trim().isNotEmpty) {
+      return data;
+    }
+
+    if (data is Map<String, dynamic>) {
+      final dynamic errors = data['errors'] ?? data['Errors'];
+      if (errors is Map<String, dynamic>) {
+        for (final dynamic value in errors.values) {
+          if (value is List<dynamic>) {
+            for (final dynamic item in value) {
+              if (item is String && item.trim().isNotEmpty) {
+                return item;
+              }
+            }
+          }
+        }
+      }
+
+      if (errors is List<dynamic>) {
+        for (final dynamic error in errors) {
+          if (error is String && error.trim().isNotEmpty) {
+            return error;
+          }
+        }
+      }
+
+      final dynamic message = data['message'] ?? data['Message'];
+      if (message is String && message.trim().isNotEmpty) {
+        return message;
+      }
+
+      final dynamic title = data['title'] ?? data['Title'];
+      if (title is String && title.trim().isNotEmpty) {
+        return title;
+      }
+    }
+
+    return 'Request failed';
   }
 
   String hmacSha256(String data) {

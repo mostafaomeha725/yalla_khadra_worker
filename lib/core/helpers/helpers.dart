@@ -10,8 +10,8 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yallakhadra/core/routes/app_routes.dart';
 import 'package:yallakhadra/core/routes/route_paths.dart';
+import 'package:yallakhadra/core/utils/easy_loading.dart';
 import 'package:yallakhadra/core/utils/validators.dart';
-import 'package:yallakhadra/core/widgets/custom_snack_bar.dart';
 import 'package:yallakhadra/core/widgets/custom_loading.dart';
 
 class Helpers {
@@ -24,14 +24,11 @@ class Helpers {
     );
 
     if (validationError != null) {
-      CustomSnackBar.showError(context, message: validationError);
+      showError(validationError);
       return;
     }
 
-    CustomSnackBar.showSuccess(
-      context,
-      message: 'A new verification code has been sent.',
-    );
+    showSuccess('A new verification code has been sent.');
 
     context.push(Routes.otpScreen);
   }
@@ -47,20 +44,17 @@ class Helpers {
     final String? validationError = Validators.validateOtpCode(otpCode);
 
     if (validationError != null) {
-      CustomSnackBar.showError(context, message: validationError);
+      showError(validationError);
       return;
     }
 
-    CustomSnackBar.showSuccess(context, message: 'Code verified successfully.');
+    showSuccess('Code verified successfully.');
 
     context.push(Routes.newPasswordScreen);
   }
 
   static void handleResendOtp(BuildContext context) {
-    CustomSnackBar.showSuccess(
-      context,
-      message: 'A new verification code has been sent.',
-    );
+    showSuccess('A new verification code has been sent.');
   }
 
   static void handleChangePassword({
@@ -74,14 +68,11 @@ class Helpers {
     );
 
     if (validationError != null) {
-      CustomSnackBar.showError(context, message: validationError);
+      showError(validationError);
       return;
     }
 
-    CustomSnackBar.showSuccess(
-      context,
-      message: 'Password changed successfully.',
-    );
+    showSuccess('Password changed successfully.');
 
     context.go(Routes.loginScreen);
   }
@@ -100,28 +91,22 @@ class Helpers {
         );
 
     if (validationError != null) {
-      CustomSnackBar.showError(context, message: validationError);
+      showError(validationError);
       return;
     }
 
-    CustomSnackBar.showSuccess(
-      context,
-      message: 'Password changed successfully.',
-    );
+    showSuccess('Password changed successfully.');
   }
 
   static Future<void> handleProfileAvatarTap(BuildContext context) async {
     final File? pickedImage = await pickImage();
 
     if (pickedImage == null) {
-      CustomSnackBar.showError(context, message: 'No image selected.');
+      showError('No image selected.');
       return;
     }
 
-    CustomSnackBar.showSuccess(
-      context,
-      message: 'Image selected successfully.',
-    );
+    showSuccess('Image selected successfully.');
   }
 
   static void handleUpdateProfileSave({
@@ -139,14 +124,11 @@ class Helpers {
     );
 
     if (validationError != null) {
-      CustomSnackBar.showError(context, message: validationError);
+      showError(validationError);
       return;
     }
 
-    CustomSnackBar.showSuccess(
-      context,
-      message: 'Profile updated successfully.',
-    );
+    showSuccess('Profile updated successfully.');
   }
 
   static void handleOpenUpdateProfile(BuildContext context) {
@@ -158,15 +140,21 @@ class Helpers {
   }
 
   static void handleOpenPrivacyTerms(BuildContext context) {
-    CustomSnackBar.showSuccess(
-      context,
-      message: 'Privacy & Terms screen will be available soon.',
-    );
+    showSuccess('Privacy & Terms screen will be available soon.');
   }
 
   static void handleProfileLogout(BuildContext context) {
-    CustomSnackBar.showSuccess(context, message: 'Logged out successfully.');
+    showSuccess('Logged out successfully.');
     context.go(Routes.loginScreen);
+  }
+
+  static Future<void> handleOpenGoogleMapsSearch(String query) async {
+    final bool opened = await LauncherHelper.launchGoogleMapsSearch(
+      query: query,
+    );
+    if (!opened) {
+      showError('Could not open Google Maps.');
+    }
   }
 
   static Future<File?> pickImage() async {

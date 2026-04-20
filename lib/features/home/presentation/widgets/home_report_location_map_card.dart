@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yallakhadra/core/helpers/helpers.dart';
 import 'package:yallakhadra/core/theme/styles.dart';
 import 'package:yallakhadra/core/widgets/bouncing_widgets.dart';
-import 'package:yallakhadra/core/widgets/custom_snack_bar.dart';
 import 'package:yallakhadra/core/widgets/custom_text.dart';
 
 class HomeReportLocationMapCard extends StatelessWidget {
@@ -66,16 +65,7 @@ class HomeReportLocationMapCard extends StatelessWidget {
           SizedBox(height: 10.h),
           BounceIt(
             onPressed: () {
-              LauncherHelper.launchGoogleMapsSearch(query: locationQuery).then((
-                bool opened,
-              ) {
-                if (!opened && context.mounted) {
-                  CustomSnackBar.showError(
-                    context,
-                    message: 'Could not open Google Maps.',
-                  );
-                }
-              });
+              Helpers.handleOpenGoogleMapsSearch(locationQuery);
             },
             child: Container(
               width: double.infinity,

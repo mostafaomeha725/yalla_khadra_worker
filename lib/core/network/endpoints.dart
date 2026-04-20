@@ -4,7 +4,9 @@ class EndPoints {
   /// Auth endpoints
   static const String register = 'auth/register';
 
-  static const String login = 'auth/login';
+  static const String login = '/Authentication/login';
+
+  static const String refreshToken = 'Authentication/refresh-token';
 
   static const String sendOtp = 'send-otp';
 
@@ -12,13 +14,21 @@ class EndPoints {
 
   static const String resendOtp = 'auth/receive-otp';
 
-  static const String forgotPassword = 'auth/forgot-password';
+  static const String forgotPassword = '/Authentication/password-reset/request';
+
+  static const String verifyPasswordResetCode =
+      '/Authentication/password-reset/verify-code';
+
+  static const String confirmPasswordReset =
+      '/Authentication/password-reset/confirm';
 
   static const String resetPassword = 'auth/reset-password';
 
   /// Profile endpoints
   static const String profileSetup = 'profile/setup';
   static const String profile = 'profile';
+  static const String changePassword = '/Authentication/change-password';
+  static const String aiWasteScan = '/AIWasteScan';
   static const String currencies = 'currencies';
   static const String savedProperties = 'saved-properties';
 
@@ -45,8 +55,7 @@ class EndPoints {
 
   /// Investment endpoints
   static const String investments = 'investments';
-  static const String calculateReturns =
-      'investments/calculate-returns';
+  static const String calculateReturns = 'investments/calculate-returns';
   static const String portfolio = 'portfolio';
   static const String portfolioProperties = 'portfolio/properties';
   static const String propertyCalculator = 'properties';

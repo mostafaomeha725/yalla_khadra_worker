@@ -1,15 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yallakhadra/core/utils/easy_loading.dart';
+import 'package:yallakhadra/features/ai_scan/presentation/cubit/ai_scan/ai_scan_cubit.dart';
 import 'package:yallakhadra/features/ai_scan/presentation/widgets/ai_scan_action_card.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AiScanActionCardsSection extends StatelessWidget {
   const AiScanActionCardsSection({super.key});
+
+  Future<void> _pickAndScan(BuildContext context, ImageSource source) async {
+    final AiScanCubit cubit = context.read<AiScanCubit>();
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: source);
+
+    if (image == null) {
+      showError('No image selected.');
+      return;
+    }
+
+    cubit.selectImage(image.path);
+    await cubit.scanSelectedImage();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         AiScanActionCard(
+          onPressed: () {
+            _pickAndScan(context, ImageSource.camera);
+          },
           icon: Icons.photo_camera_outlined,
           title: 'Capture',
           subtitle: 'Take a photo with camera',
@@ -34,6 +55,9 @@ class AiScanActionCardsSection extends StatelessWidget {
         ),
         SizedBox(height: 8.h),
         AiScanActionCard(
+          onPressed: () {
+            _pickAndScan(context, ImageSource.gallery);
+          },
           icon: Icons.upload_rounded,
           title: 'Upload',
           subtitle: 'Choose from gallery',

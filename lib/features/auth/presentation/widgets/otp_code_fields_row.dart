@@ -27,31 +27,47 @@ class OtpCodeFieldsRow extends StatelessWidget {
 
             return SizedBox(
               width: 42.w,
-              child: AppFormField(
-                controller: controllers[index],
-                focusNode: focusNodes[index],
-                hintText: '',
-                keyboardType: TextInputType.number,
-                textInputAction: index == controllers.length - 1
-                    ? TextInputAction.done
-                    : TextInputAction.next,
-                fillColor: AppColors.authFieldFill,
-                borderColor: isActiveField
-                    ? AppColors.authPrimary
-                    : AppColors.authFieldBorder,
-                borderWidth: isActiveField ? 1.8 : 1.2,
-                radius: 12.r,
-                contentPadding: EdgeInsets.symmetric(vertical: 12.h),
-                textAlign: TextAlign.center,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(1),
-                ],
-                onChanged: (value) {
-                  if (value.length == 1 && index < controllers.length - 1) {
-                    FocusScope.of(context).requestFocus(focusNodes[index + 1]);
+              child: Focus(
+                onKeyEvent: (FocusNode node, KeyEvent event) {
+                  if (event is KeyDownEvent &&
+                      event.logicalKey == LogicalKeyboardKey.backspace &&
+                      controllers[index].text.isEmpty &&
+                      index > 0) {
+                    controllers[index - 1].clear();
+                    FocusScope.of(context).requestFocus(focusNodes[index - 1]);
+                    return KeyEventResult.handled;
                   }
+
+                  return KeyEventResult.ignored;
                 },
+                child: AppFormField(
+                  controller: controllers[index],
+                  focusNode: focusNodes[index],
+                  hintText: '',
+                  keyboardType: TextInputType.number,
+                  textInputAction: index == controllers.length - 1
+                      ? TextInputAction.done
+                      : TextInputAction.next,
+                  fillColor: AppColors.authFieldFill,
+                  borderColor: isActiveField
+                      ? AppColors.authPrimary
+                      : AppColors.authFieldBorder,
+                  borderWidth: isActiveField ? 1.8 : 1.2,
+                  radius: 12.r,
+                  contentPadding: EdgeInsets.symmetric(vertical: 12.h),
+                  textAlign: TextAlign.center,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(1),
+                  ],
+                  onChanged: (value) {
+                    if (value.length == 1 && index < controllers.length - 1) {
+                      FocusScope.of(
+                        context,
+                      ).requestFocus(focusNodes[index + 1]);
+                    }
+                  },
+                ),
               ),
             );
           },

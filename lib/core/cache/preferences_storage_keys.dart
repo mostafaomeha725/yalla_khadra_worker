@@ -8,4 +8,5 @@ enum PreferencesKeys {
   email,
   phone,
   userToken,
+  refreshToken,
 }
