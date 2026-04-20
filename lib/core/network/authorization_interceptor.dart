@@ -29,11 +29,17 @@ class AuthorizationInterceptor extends Interceptor {
   ) async {
     final prefs = sl<PreferencesStorage>();
 
-    final token = prefs.getUserToken();
+    final String token = (prefs.getUserToken() ?? '').trim();
+    final bool isAnonymousAuthRequest = _isAnonymousAuthRequest(options);
 
-    if (token != null && token.isNotEmpty) {
-      options.headers['Authorization'] = "Bearer $token";
+    // Ensure stale Authorization headers never leak into anonymous auth endpoints.
+    if (isAnonymousAuthRequest || token.isEmpty) {
+      options.headers.remove('Authorization');
+      handler.next(options);
+      return;
     }
+
+    options.headers['Authorization'] = 'Bearer $token';
 
     handler.next(options);
   }
@@ -212,6 +218,17 @@ class AuthorizationInterceptor extends Interceptor {
         _isRefreshRequest(requestOptions);
   }
 
+  bool _isAnonymousAuthRequest(RequestOptions requestOptions) {
+    final String path = requestOptions.path.toLowerCase();
+
+    return path.contains(EndPoints.login.toLowerCase()) ||
+        path.contains(EndPoints.register.toLowerCase()) ||
+        path.contains(EndPoints.forgotPassword.toLowerCase()) ||
+        path.contains(EndPoints.verifyPasswordResetCode.toLowerCase()) ||
+        path.contains(EndPoints.confirmPasswordReset.toLowerCase()) ||
+        path.contains(EndPoints.resetPassword.toLowerCase());
+  }
+
   Future<bool> _performRefresh() async {
     final prefs = sl<PreferencesStorage>();
     final String? refreshToken = prefs.getRefreshToken();
@@ -310,5 +327,6 @@ class AuthorizationInterceptor extends Interceptor {
     final prefs = sl<PreferencesStorage>();
     await prefs.deleteUserToken();
     await prefs.deleteRefreshToken();
+    _dio.options.headers.remove('Authorization');
   }
 }

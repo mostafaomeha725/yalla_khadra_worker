@@ -45,7 +45,7 @@ class HomeDashboardContent extends StatelessWidget {
           HomeWelcomeBanner(workerName: data.workerName),
           verticalSpacing(24),
           HomeOverviewSection(
-            avgMinutes: data.avgMinutes,
+            avgHours: data.avgHours,
             completedCount: data.completedCount,
           ),
           verticalSpacing(36),

@@ -3,14 +3,14 @@ import 'package:yallakhadra/features/home/domain/entities/home_nearby_report_ent
 
 class HomeDashboardEntity {
   final String workerName;
-  final int avgMinutes;
+  final int avgHours;
   final int completedCount;
   final HomeCleanupTaskEntity currentCleanup;
   final List<HomeNearbyReportEntity> nearbyReports;
 
   const HomeDashboardEntity({
     required this.workerName,
-    required this.avgMinutes,
+    required this.avgHours,
     required this.completedCount,
     required this.currentCleanup,
     required this.nearbyReports,

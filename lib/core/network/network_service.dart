@@ -314,7 +314,7 @@ class NetworkService {
       return const Left(Failure("Format Exception"));
     } on DioException catch (e) {
       if (e.type == DioExceptionType.badResponse) {
-        return Left(Failure(e.response!.data['message']));
+        return Left(Failure(_extractErrorMessage(e.response?.data)));
         // return Left(_l)(e.message);
       } else if (e.type == DioExceptionType.connectionTimeout) {
         // safePrint('check your connection');

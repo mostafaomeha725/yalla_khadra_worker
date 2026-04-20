@@ -15,11 +15,15 @@ class AiScanContentSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AiScanCubit>(
-      create: (_) => sl<AiScanCubit>(),
+      create: (_) => sl<AiScanCubit>()..fetchMyScans(),
       child: BlocListener<AiScanCubit, AiScanState>(
         listener: (BuildContext context, AiScanState state) {
           if (state is AiScanLoading) {
-            showLoading(status: 'Analyzing image...', userInteractions: false);
+            showLoading(status: state.message, userInteractions: false);
+          }
+
+          if (state is AiScanLoaded) {
+            hideLoading();
           }
 
           if (state is AiScanError) {

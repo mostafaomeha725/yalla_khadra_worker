@@ -54,8 +54,23 @@ class AuthRepositoryImpl implements AuthRepository {
     return result.fold((Failure failure) async => Left(failure), (
       authModel,
     ) async {
+      final bool isWorker = authModel.roles.contains(2);
+      if (!isWorker) {
+        await _preferencesStorage.deleteUserToken();
+        await _preferencesStorage.deleteRefreshToken();
+        await _preferencesStorage.clearUserProfile();
+        return const Left(
+          ServerFailure(message: 'This account is not a worker account.'),
+        );
+      }
+
       await _preferencesStorage.saveUserToken(authModel.accessToken);
       await _preferencesStorage.saveRefreshToken(authModel.refreshToken);
+      await _preferencesStorage.saveUserProfile(
+        firstName: authModel.firstName,
+        lastName: authModel.lastName,
+        email: authModel.email,
+      );
       return Right(authModel.toEntity());
     });
   }

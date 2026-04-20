@@ -7,9 +7,10 @@ class AiScanResultModel {
 
   const AiScanResultModel({required this.result, required this.message});
 
-  factory AiScanResultModel.fromJson(Map<String, dynamic> json) {
-    final Map<String, dynamic> data =
-        (json['data'] as Map<String, dynamic>?) ?? <String, dynamic>{};
+  factory AiScanResultModel.fromScanData({
+    required Map<String, dynamic> data,
+    required String message,
+  }) {
     final Map<String, dynamic> image =
         (data['wasteScanImage'] as Map<String, dynamic>?) ??
         <String, dynamic>{};
@@ -25,6 +26,15 @@ class AiScanResultModel {
         createdAt: data['createdAt'] as String? ?? '',
         imageUrl: image['url'] as String? ?? '',
       ),
+      message: message,
+    );
+  }
+
+  factory AiScanResultModel.fromJson(Map<String, dynamic> json) {
+    final Map<String, dynamic> data =
+        (json['data'] as Map<String, dynamic>?) ?? <String, dynamic>{};
+    return AiScanResultModel.fromScanData(
+      data: data,
       message: json['message'] as String? ?? 'Created successfully.',
     );
   }

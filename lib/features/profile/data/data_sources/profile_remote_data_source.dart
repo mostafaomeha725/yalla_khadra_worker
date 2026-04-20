@@ -8,4 +8,6 @@ abstract class ProfileRemoteDataSource {
     required String newPassword,
     required String confirmNewPassword,
   });
+
+  Future<Either<Failure, String>> logout({required String refreshToken});
 }

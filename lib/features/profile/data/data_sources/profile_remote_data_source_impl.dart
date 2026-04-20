@@ -11,6 +11,48 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   ProfileRemoteDataSourceImpl(this._networkService);
 
   @override
+  Future<Either<Failure, String>> logout({required String refreshToken}) async {
+    final result = await _networkService.postData(
+      endPoint: EndPoints.logout,
+      data: <String, dynamic>{'refreshToken': refreshToken},
+    );
+
+    return result.fold(
+      (failure) {
+        final String errorMessage = failure.message.trim().isEmpty
+            ? 'Unable to logout right now.'
+            : failure.message;
+        return Left(ServerFailure(message: errorMessage));
+      },
+      (dynamic data) {
+        if (data is! Map<String, dynamic>) {
+          return const Left(ServerFailure(message: 'Invalid server response'));
+        }
+
+        final bool succeeded = data['succeeded'] as bool? ?? false;
+        final String responseMessage = (data['message'] as String? ?? '')
+            .trim();
+
+        if (!succeeded) {
+          return Left(
+            ServerFailure(
+              message: responseMessage.isEmpty
+                  ? 'Unable to logout right now.'
+                  : responseMessage,
+            ),
+          );
+        }
+
+        return Right(
+          responseMessage.isEmpty
+              ? 'Logged out successfully.'
+              : responseMessage,
+        );
+      },
+    );
+  }
+
+  @override
   Future<Either<Failure, ChangePasswordModel>> changePassword({
     required String currentPassword,
     required String newPassword,

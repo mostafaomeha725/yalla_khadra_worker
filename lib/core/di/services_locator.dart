@@ -17,6 +17,7 @@ import 'package:yallakhadra/features/ai_scan/data/data_sources/ai_scan_remote_da
 import 'package:yallakhadra/features/ai_scan/data/data_sources/ai_scan_remote_data_source_impl.dart';
 import 'package:yallakhadra/features/ai_scan/data/repositories/ai_scan_repository_impl.dart';
 import 'package:yallakhadra/features/ai_scan/domain/repositories/ai_scan_repository.dart';
+import 'package:yallakhadra/features/ai_scan/domain/usecases/get_my_waste_scans_usecase.dart';
 import 'package:yallakhadra/features/ai_scan/domain/usecases/scan_waste_image_usecase.dart';
 import 'package:yallakhadra/features/ai_scan/presentation/cubit/ai_scan/ai_scan_cubit.dart';
 import 'package:yallakhadra/features/profile/data/data_sources/profile_remote_data_source.dart';
@@ -24,7 +25,9 @@ import 'package:yallakhadra/features/profile/data/data_sources/profile_remote_da
 import 'package:yallakhadra/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:yallakhadra/features/profile/domain/repositories/profile_repository.dart';
 import 'package:yallakhadra/features/profile/domain/usecases/change_password_usecase.dart';
+import 'package:yallakhadra/features/profile/domain/usecases/logout_usecase.dart';
 import 'package:yallakhadra/features/profile/presentation/cubit/change_password_cubit.dart';
+import 'package:yallakhadra/features/profile/presentation/cubit/profile_logout_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -89,8 +92,9 @@ class ServiceLocator {
     sl.registerLazySingleton<AiScanRepository>(
       () => AiScanRepositoryImpl(sl()),
     );
+    sl.registerLazySingleton(() => GetMyWasteScansUseCase(sl()));
     sl.registerLazySingleton(() => ScanWasteImageUseCase(sl()));
-    sl.registerFactory(() => AiScanCubit(sl()));
+    sl.registerFactory(() => AiScanCubit(sl(), sl()));
   }
 
   /// =============================
@@ -101,10 +105,12 @@ class ServiceLocator {
       () => ProfileRemoteDataSourceImpl(sl()),
     );
     sl.registerLazySingleton<ProfileRepository>(
-      () => ProfileRepositoryImpl(sl()),
+      () => ProfileRepositoryImpl(sl(), sl()),
     );
     sl.registerLazySingleton(() => ChangePasswordUseCase(sl()));
+    sl.registerLazySingleton(() => LogoutUseCase(sl()));
     sl.registerFactory(() => ChangePasswordCubit(sl()));
+    sl.registerFactory(() => ProfileLogoutCubit(sl()));
   }
 
   // /// =============================

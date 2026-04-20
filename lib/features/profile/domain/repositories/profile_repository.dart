@@ -8,4 +8,6 @@ abstract class ProfileRepository {
     required String newPassword,
     required String confirmNewPassword,
   });
+
+  Future<Either<Failure, String>> logout();
 }

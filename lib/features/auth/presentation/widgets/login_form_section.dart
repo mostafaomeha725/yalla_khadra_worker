@@ -82,6 +82,7 @@ class LoginFormSectionState extends State<LoginFormSection> {
             fillColor: const Color(0xFFF3F4F6),
             borderColor: const Color(0xFFE5E7EB),
             radius: 14.r,
+            maxLines: 1,
             contentPadding: EdgeInsets.symmetric(
               horizontal: 14.w,
               vertical: 14.h,

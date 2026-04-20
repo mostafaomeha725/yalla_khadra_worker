@@ -3,6 +3,8 @@ enum PreferencesKeys {
   currentCurrency,
   fcmToken,
   uuid,
+  firstName,
+  lastName,
   name,
   picture,
   email,

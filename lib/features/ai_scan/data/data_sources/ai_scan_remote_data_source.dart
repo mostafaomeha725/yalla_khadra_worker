@@ -6,4 +6,6 @@ abstract class AiScanRemoteDataSource {
   Future<Either<Failure, AiScanResultModel>> scanWasteImage({
     required String imagePath,
   });
+
+  Future<Either<Failure, List<AiScanResultModel>>> getMyScans();
 }

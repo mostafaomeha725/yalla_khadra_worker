@@ -7,13 +7,13 @@ import 'package:yallakhadra/core/routes/app_routes.dart';
 import 'package:yallakhadra/core/theme/light_colors.dart';
 import 'package:yallakhadra/core/utils/easy_loading.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.clear(); // ده بيمسح كل البيانات
+  // final prefs = await SharedPreferences.getInstance();
+  // await prefs.clear(); // يمسح كل الكاش
 
   await ServiceLocator().init();
   configureEasyLoading();

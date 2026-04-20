@@ -6,12 +6,12 @@ import 'package:yallakhadra/features/home/presentation/constants/home_strings.da
 import 'package:yallakhadra/features/home/presentation/widgets/home_stat_card.dart';
 
 class HomeOverviewSection extends StatelessWidget {
-  final int avgMinutes;
+  final int avgHours;
   final int completedCount;
 
   const HomeOverviewSection({
     super.key,
-    required this.avgMinutes,
+    required this.avgHours,
     required this.completedCount,
   });
 
@@ -29,7 +29,7 @@ class HomeOverviewSection extends StatelessWidget {
           children: [
             HomeStatCard(
               icon: Icons.trending_up_rounded,
-              value: '${avgMinutes}min',
+              value: '${avgHours}h',
               label: HomeStrings.avgTimeLabel,
               iconBackground: const Color(0xFFA855F7),
             ),

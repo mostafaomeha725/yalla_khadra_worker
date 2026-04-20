@@ -33,7 +33,7 @@ class AiScanScanHistoryCard extends StatelessWidget {
       onPressed: () {},
       child: Container(
         width: double.infinity,
-        constraints: BoxConstraints(minHeight: 94.h),
+        constraints: BoxConstraints(minHeight: 108.h),
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
         decoration: BoxDecoration(
           color: const Color(0xFFF8F8F8),
@@ -41,6 +41,7 @@ class AiScanScanHistoryCard extends StatelessWidget {
           border: Border.all(color: const Color(0xFFE5E7EB)),
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppImage(
               imageUrl: imageUrl,
@@ -54,11 +55,27 @@ class AiScanScanHistoryCard extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  AppText(
-                    title,
-                    style: font14w700.copyWith(color: const Color(0xFF111827)),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: AppText(
+                          title,
+                          maxLines: 1,
+                          style: font14w700.copyWith(
+                            color: const Color(0xFF111827),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8.w),
+                      AppText(
+                        timeAgo,
+                        style: font10w500.copyWith(
+                          color: const Color(0xFF9CA3AF),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 6.h),
                   AiScanResultChip(
@@ -69,10 +86,6 @@ class AiScanScanHistoryCard extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-            AppText(
-              timeAgo,
-              style: font10w500.copyWith(color: const Color(0xFF9CA3AF)),
             ),
           ],
         ),

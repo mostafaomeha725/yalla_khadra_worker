@@ -6,7 +6,9 @@ class EndPoints {
 
   static const String login = '/Authentication/login';
 
-  static const String refreshToken = 'Authentication/refresh-token';
+  static const String refreshToken = '/Authentication/refresh-token';
+
+  static const String logout = '/Authentication/logout';
 
   static const String sendOtp = 'send-otp';
 
@@ -29,6 +31,10 @@ class EndPoints {
   static const String profile = 'profile';
   static const String changePassword = '/Authentication/change-password';
   static const String aiWasteScan = '/AIWasteScan';
+  static const String aiWasteScanMy = '/AIWasteScan/my';
+  static const String cleanupTaskMainOverview = '/CleanupTask/main-overview';
+  static const String cleanupTaskMyWorkOverview =
+      '/CleanupTask/my-work-overview';
   static const String currencies = 'currencies';
   static const String savedProperties = 'saved-properties';
 

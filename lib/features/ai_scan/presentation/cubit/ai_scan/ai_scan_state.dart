@@ -23,8 +23,21 @@ class AiScanImageSelected extends AiScanState {
   });
 }
 
+class AiScanLoaded extends AiScanState {
+  const AiScanLoaded({required super.scans, required super.selectedImagePath});
+}
+
 class AiScanLoading extends AiScanState {
-  const AiScanLoading({required super.scans, required super.selectedImagePath});
+  final String message;
+
+  const AiScanLoading({
+    required this.message,
+    required super.scans,
+    required super.selectedImagePath,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[message, ...super.props];
 }
 
 class AiScanSuccess extends AiScanState {

@@ -6,4 +6,6 @@ abstract class AiScanRepository {
   Future<Either<Failure, AiScanResultEntity>> scanWasteImage({
     required String imagePath,
   });
+
+  Future<Either<Failure, List<AiScanResultEntity>>> getMyScans();
 }

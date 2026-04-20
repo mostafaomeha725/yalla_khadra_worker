@@ -35,6 +35,10 @@ class PreferencesStorage {
     return _preferences.getString(key.name);
   }
 
+  Future<void> removeString({required PreferencesKeys key}) async {
+    await _preferences.remove(key.name);
+  }
+
   /// ================= TOKEN =================
   Future<void> saveUserToken(String token) async {
     await _preferences.setString(PreferencesKeys.userToken.name, token);
@@ -58,6 +62,41 @@ class PreferencesStorage {
 
   Future<void> deleteRefreshToken() async {
     await _preferences.remove(PreferencesKeys.refreshToken.name);
+  }
+
+  /// ================= USER PROFILE =================
+  Future<void> saveUserProfile({
+    required String firstName,
+    required String lastName,
+    required String email,
+  }) async {
+    await _preferences.setString(PreferencesKeys.firstName.name, firstName);
+    await _preferences.setString(PreferencesKeys.lastName.name, lastName);
+    await _preferences.setString(PreferencesKeys.email.name, email);
+    await _preferences.setString(
+      PreferencesKeys.name.name,
+      '${firstName.trim()} ${lastName.trim()}'.trim(),
+    );
+  }
+
+  String getFirstName() {
+    return (_preferences.getString(PreferencesKeys.firstName.name) ?? '')
+        .trim();
+  }
+
+  String getLastName() {
+    return (_preferences.getString(PreferencesKeys.lastName.name) ?? '').trim();
+  }
+
+  String getEmail() {
+    return (_preferences.getString(PreferencesKeys.email.name) ?? '').trim();
+  }
+
+  Future<void> clearUserProfile() async {
+    await removeString(key: PreferencesKeys.firstName);
+    await removeString(key: PreferencesKeys.lastName);
+    await removeString(key: PreferencesKeys.name);
+    await removeString(key: PreferencesKeys.email);
   }
 
   /// ================= LANGUAGE =================

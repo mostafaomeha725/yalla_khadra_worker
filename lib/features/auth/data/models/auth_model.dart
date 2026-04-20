@@ -23,15 +23,20 @@ class AuthModel {
     final Map<String, dynamic> data =
         (json['data'] as Map<String, dynamic>?) ?? <String, dynamic>{};
 
-    final Map<String, dynamic> refreshData =
-        (data['refreshToken'] as Map<String, dynamic>?) ?? <String, dynamic>{};
+    final dynamic refreshRaw = data['refreshToken'];
+    final Map<String, dynamic> refreshData = refreshRaw is Map<String, dynamic>
+        ? refreshRaw
+        : <String, dynamic>{};
+    final String refreshTokenValue = refreshRaw is String
+        ? refreshRaw
+        : refreshData['token'] as String? ?? '';
 
     final Map<String, dynamic> userData =
         (data['user'] as Map<String, dynamic>?) ?? <String, dynamic>{};
 
     return AuthModel(
       accessToken: data['accessToken'] as String? ?? '',
-      refreshToken: refreshData['token'] as String? ?? '',
+      refreshToken: refreshTokenValue,
       userId:
           (userData['id'] as num?)?.toInt() ??
           (refreshData['userId'] as num?)?.toInt() ??

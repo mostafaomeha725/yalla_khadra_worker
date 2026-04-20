@@ -52,7 +52,13 @@ class AiScanPreviousScansSection extends StatelessWidget {
                 ),
                 child: AiScanScanHistoryCard(
                   imageUrl: scan.imageUrl,
-                  title: scan.predictedType,
+                  title: scan.predictedType.trim().isEmpty
+                      ? 'Unknown Waste Type'
+                      : scan.predictedType,
+                  // description: scan.explanation.trim().isEmpty
+                  //     ? 'No explanation available.'
+                  //     : scan.explanation,
+                  // scanId: scan.id,
                   timeAgo: _formatScanTime(scan.createdAt),
                   resultText: isRecyclable ? 'Recyclable' : 'Non-recyclable',
                   resultIcon: isRecyclable

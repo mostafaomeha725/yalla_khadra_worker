@@ -1,6 +1,8 @@
 import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:yallakhadra/core/cache/preferences_storage.dart';
+import 'package:yallakhadra/core/di/services_locator.dart';
 import 'package:yallakhadra/features/auth/presentation/screens/forget_password_screen.dart';
 import 'package:yallakhadra/features/auth/presentation/screens/login_screen.dart';
 import 'package:yallakhadra/features/auth/presentation/screens/new_password_screen.dart';
@@ -21,11 +23,42 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 final CustomGoRouterObserver customGoRouterObserver = CustomGoRouterObserver();
 
+bool _hasAuthSession() {
+  final PreferencesStorage prefs = sl<PreferencesStorage>();
+  final String accessToken = (prefs.getUserToken() ?? '').trim();
+  final String refreshToken = (prefs.getRefreshToken() ?? '').trim();
+  return accessToken.isNotEmpty || refreshToken.isNotEmpty;
+}
+
+bool _isAuthRoute(String route) {
+  return route == Routes.loginScreen ||
+      route == Routes.forgetPasswordScreen ||
+      route == Routes.otpScreen ||
+      route == Routes.newPasswordScreen ||
+      route == Routes.registerScreen;
+}
+
 GoRouter createRouter() {
   return GoRouter(
-    initialLocation: Routes.mainNavigationScreen,
+    initialLocation: _hasAuthSession()
+        ? Routes.mainNavigationScreen
+        : Routes.loginScreen,
     navigatorKey: navigatorKey,
     debugLogDiagnostics: true,
+    redirect: (BuildContext context, GoRouterState state) {
+      final bool authenticated = _hasAuthSession();
+      final String location = state.matchedLocation;
+
+      if (!authenticated && !_isAuthRoute(location)) {
+        return Routes.loginScreen;
+      }
+
+      if (authenticated && location == Routes.loginScreen) {
+        return Routes.mainNavigationScreen;
+      }
+
+      return null;
+    },
     observers: [
       if (isDevEnviroment()) ChuckerFlutter.navigatorObserver,
       // customGoRouterObserver,
