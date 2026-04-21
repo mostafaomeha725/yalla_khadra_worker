@@ -140,7 +140,7 @@ class Helpers {
   }
 
   static void handleOpenPrivacyTerms(BuildContext context) {
-    showSuccess('Privacy & Terms screen will be available soon.');
+    context.push(Routes.profilePrivacyScreen);
   }
 
   static void handleProfileLogout(BuildContext context) {

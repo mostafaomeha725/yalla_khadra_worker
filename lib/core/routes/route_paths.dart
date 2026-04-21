@@ -10,6 +10,7 @@ class Routes {
   static const profileScreen = '/profile';
   static const profileChangePasswordScreen = '/profile/change-password';
   static const profileUpdateProfileScreen = '/profile/update-profile';
+  static const profilePrivacyScreen = '/profile/privacy';
   static const mainNavigationScreen = '/mainNavigationScreen';
   static const editProfileScreen = '/edit-profile-screen';
   static const homeReportDetailsScreen = '/home/report-details';

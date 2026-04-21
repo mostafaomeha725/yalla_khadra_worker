@@ -12,6 +12,7 @@ import 'package:yallakhadra/features/home/domain/entities/home_nearby_report_ent
 import 'package:yallakhadra/features/home/presentation/screens/home_current_cleanup_screen.dart';
 import 'package:yallakhadra/features/home/presentation/screens/home_report_details_screen.dart';
 import 'package:yallakhadra/features/profile/presentation/screens/change_password_screen.dart';
+import 'package:yallakhadra/features/profile/presentation/screens/privacy_screen.dart';
 import 'package:yallakhadra/features/profile/presentation/screens/profile_screen.dart';
 import 'package:yallakhadra/features/profile/presentation/screens/update_profile_screen.dart';
 import 'package:yallakhadra/core/widgets/custom_nav_bar.dart';
@@ -104,6 +105,10 @@ GoRouter createRouter() {
       GoRoute(
         path: Routes.profileUpdateProfileScreen,
         builder: (context, state) => const UpdateProfileScreen(),
+      ),
+      GoRoute(
+        path: Routes.profilePrivacyScreen,
+        builder: (context, state) => const PrivacyScreen(),
       ),
       GoRoute(
         path: Routes.mainNavigationScreen,
