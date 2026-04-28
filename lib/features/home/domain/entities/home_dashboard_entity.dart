@@ -6,6 +6,7 @@ class HomeDashboardEntity {
   final int avgHours;
   final int completedCount;
   final HomeCleanupTaskEntity currentCleanup;
+  final List<HomeCleanupTaskEntity> currentCleanups;
   final List<HomeNearbyReportEntity> nearbyReports;
 
   const HomeDashboardEntity({
@@ -13,6 +14,7 @@ class HomeDashboardEntity {
     required this.avgHours,
     required this.completedCount,
     required this.currentCleanup,
+    this.currentCleanups = const <HomeCleanupTaskEntity>[],
     required this.nearbyReports,
   });
 }

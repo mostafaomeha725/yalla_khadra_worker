@@ -47,16 +47,14 @@ class HomeCurrentCleanupTaskModel {
     );
   }
 
-  static HomeCurrentCleanupTaskModel? fromResponse(Map<String, dynamic> json) {
+  static List<HomeCurrentCleanupTaskModel> listFromResponse(
+    Map<String, dynamic> json,
+  ) {
     final List<dynamic> data = (json['data'] as List<dynamic>?) ?? <dynamic>[];
-    if (data.isEmpty) {
-      return null;
-    }
-    final dynamic first = data.first;
-    if (first is! Map<String, dynamic>) {
-      return null;
-    }
-    return HomeCurrentCleanupTaskModel.fromJson(first);
+    return data
+        .whereType<Map<String, dynamic>>()
+        .map(HomeCurrentCleanupTaskModel.fromJson)
+        .toList(growable: false);
   }
 
   static String mapWasteTypeName(int value) {

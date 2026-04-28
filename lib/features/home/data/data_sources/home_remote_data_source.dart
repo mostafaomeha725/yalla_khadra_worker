@@ -6,7 +6,8 @@ import 'package:yallakhadra/features/home/data/models/home_main_overview_model.d
 abstract class HomeRemoteDataSource {
   Future<Either<Failure, HomeMainOverviewModel>> getMainOverview();
 
-  Future<Either<Failure, HomeCurrentCleanupTaskModel?>> getMyUncompletedTask();
+  Future<Either<Failure, List<HomeCurrentCleanupTaskModel>>>
+  getMyUncompletedTask();
 
   Future<Either<Failure, void>> completeCleanupTask({
     required int taskId,

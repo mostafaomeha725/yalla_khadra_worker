@@ -27,40 +27,60 @@ class HomeRepositoryImpl implements HomeRepository {
       (model) => model,
     );
 
-    final HomeCurrentCleanupTaskModel? currentCleanup = currentCleanupResult
-        .fold((failure) => null, (model) => model);
-    final String distance = currentCleanup == null
-        ? 'Distance unavailable'
-        : await Helpers.formatDistanceFromCurrentLocation(
-            targetLatitude: currentCleanup.latitude,
-            targetLongitude: currentCleanup.longitude,
+    final List<HomeCurrentCleanupTaskModel> currentCleanups =
+        currentCleanupResult.fold(
+          (failure) => <HomeCurrentCleanupTaskModel>[],
+          (models) => models,
+        );
+
+    final List<HomeCleanupTaskEntity> currentCleanupEntities = [];
+    for (final HomeCurrentCleanupTaskModel item in currentCleanups) {
+      final String distance = await Helpers.formatDistanceFromCurrentLocation(
+        targetLatitude: item.latitude,
+        targetLongitude: item.longitude,
+      );
+      currentCleanupEntities.add(
+        HomeCleanupTaskEntity(
+          taskId: item.taskId,
+          title: item.address,
+          subTitle: '',
+          distance: distance,
+          wasteType: item.wasteType,
+          status: 'In Progress',
+          timeAgo: Helpers.formatTakenTimeAgo(item.timeAgo),
+          imageUrl: item.imageUrl.isNotEmpty
+              ? item.imageUrl
+              : 'https://images.pexels.com/photos/3735657/pexels-photo-3735657.jpeg?auto=compress&cs=tinysrgb&w=600',
+          imageUrls: item.imageUrls,
+          latitude: item.latitude,
+          longitude: item.longitude,
+          locationQuery: item.address.trim().isNotEmpty
+              ? item.address
+              : '${item.latitude},${item.longitude}',
+        ),
+      );
+    }
+
+    final HomeCleanupTaskEntity firstCleanup = currentCleanupEntities.isNotEmpty
+        ? currentCleanupEntities.first
+        : const HomeCleanupTaskEntity(
+            taskId: 0,
+            title: 'No Active Cleanup',
+            subTitle: '',
+            distance: 'Distance unavailable',
+            wasteType: 'Unknown',
+            status: 'In Progress',
+            timeAgo: 'Taken recently',
+            imageUrl:
+                'https://images.pexels.com/photos/3735657/pexels-photo-3735657.jpeg?auto=compress&cs=tinysrgb&w=600',
           );
-    final String takenTime = currentCleanup == null
-        ? 'Taken recently'
-        : Helpers.formatTakenTimeAgo(currentCleanup.timeAgo);
 
     return HomeDashboardEntity(
       workerName: 'Ahmed',
       avgHours: overview.averageHours,
       completedCount: overview.completedCleanupsCount,
-      currentCleanup: HomeCleanupTaskEntity(
-        taskId: currentCleanup?.taskId ?? 0,
-        title: currentCleanup?.address ?? 'No Active Cleanup',
-        subTitle: '',
-        distance: distance,
-        wasteType: currentCleanup?.wasteType ?? 'Unknown',
-        status: 'In Progress',
-        timeAgo: takenTime,
-        imageUrl: currentCleanup?.imageUrl.isNotEmpty == true
-            ? currentCleanup!.imageUrl
-            : 'https://images.pexels.com/photos/3735657/pexels-photo-3735657.jpeg?auto=compress&cs=tinysrgb&w=600',
-        imageUrls: currentCleanup?.imageUrls ?? const <String>[],
-        latitude: currentCleanup?.latitude ?? 0,
-        longitude: currentCleanup?.longitude ?? 0,
-        locationQuery: currentCleanup?.address.trim().isNotEmpty == true
-            ? currentCleanup!.address
-            : '${currentCleanup?.latitude ?? 0},${currentCleanup?.longitude ?? 0}',
-      ),
+      currentCleanup: firstCleanup,
+      currentCleanups: currentCleanupEntities,
       nearbyReports: [
         const HomeNearbyReportEntity(
           title: 'Al Wahda Street, near',

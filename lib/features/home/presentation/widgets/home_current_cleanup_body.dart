@@ -64,8 +64,7 @@ class _HomeCurrentCleanupBodyState extends State<HomeCurrentCleanupBody> {
         if (state is HomeCleanupTaskCompleted) {
           hideLoading();
           showSuccess(state.message);
-          context.read<HomeCubit>().loadDashboard();
-          context.pop();
+          context.pop(true);
         }
         if (state is HomeCleanupTaskCompleteError) {
           hideLoading();

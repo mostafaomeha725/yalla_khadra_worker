@@ -41,7 +41,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, HomeCurrentCleanupTaskModel?>>
+  Future<Either<Failure, List<HomeCurrentCleanupTaskModel>>>
   getMyUncompletedTask() async {
     final result = await _networkService.getData(
       endPoint: EndPoints.cleanupTaskMyUncompletedTasks,
@@ -68,7 +68,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         );
       }
 
-      return Right(HomeCurrentCleanupTaskModel.fromResponse(data));
+      return Right(HomeCurrentCleanupTaskModel.listFromResponse(data));
     });
   }
 
