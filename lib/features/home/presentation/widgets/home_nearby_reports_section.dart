@@ -3,6 +3,7 @@ import 'package:yallakhadra/core/theme/styles.dart';
 import 'package:yallakhadra/core/utils/spacing.dart';
 import 'package:yallakhadra/core/widgets/bouncing_widgets.dart';
 import 'package:yallakhadra/core/widgets/custom_text.dart';
+import 'package:yallakhadra/core/widgets/pagination_widget.dart';
 import 'package:yallakhadra/features/home/domain/entities/home_nearby_report_entity.dart';
 import 'package:yallakhadra/features/home/presentation/constants/home_strings.dart';
 import 'package:yallakhadra/features/home/presentation/widgets/home_nearby_report_card.dart';
@@ -38,6 +39,11 @@ class HomeNearbyReportsSection extends StatelessWidget {
           children: reports
               .map((report) => HomeNearbyReportCard(report: report))
               .toList(),
+        ),
+        PaginationWidget(
+          totalPages: 10,
+          currentPage: 1,
+          onPageChanged: (page) {},
         ),
       ],
     );
