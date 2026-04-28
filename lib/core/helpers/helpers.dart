@@ -15,6 +15,62 @@ import 'package:yallakhadra/core/utils/validators.dart';
 import 'package:yallakhadra/core/widgets/custom_loading.dart';
 
 class Helpers {
+  static String formatMyWorkCompletedAt(String completedAt) {
+    final DateTime? dateTime = DateTime.tryParse(completedAt);
+    if (dateTime == null) {
+      return completedAt;
+    }
+
+    final DateTime now = DateTime.now();
+    final DateTime localDateTime = dateTime.toLocal();
+    final Duration difference = now.difference(localDateTime);
+
+    final String hour = (dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12)
+        .toString()
+        .padLeft(2, '0');
+    final String minute = dateTime.minute.toString().padLeft(2, '0');
+    final String period = dateTime.hour >= 12 ? 'PM' : 'AM';
+    final String timeText = '$hour:$minute $period';
+
+    if (difference.inDays <= 0) {
+      return 'Today, $timeText';
+    }
+
+    if (difference.inDays < 30) {
+      return '${difference.inDays} days ago, $timeText';
+    }
+
+    final int months = (difference.inDays / 30).floor();
+    if (months < 12) {
+      return '${months == 1 ? '1 month' : '$months months'} ago, $timeText';
+    }
+
+    final int years = (months / 12).floor();
+    return '${years == 1 ? '1 year' : '$years years'} ago, $timeText';
+  }
+
+  static String formatMyWorkDuration(String duration) {
+    final int firstDotIndex = duration.indexOf('.');
+    if (firstDotIndex <= 0 || firstDotIndex == duration.length - 1) {
+      return duration;
+    }
+
+    final String daysPart = duration.substring(0, firstDotIndex);
+    final String timePart = duration.substring(firstDotIndex + 1);
+
+    final int days = int.tryParse(daysPart) ?? 0;
+    final List<String> timeParts = timePart.split(':');
+    if (timeParts.length < 2) {
+      return duration;
+    }
+
+    final int hours = int.tryParse(timeParts[0]) ?? 0;
+    final int minutes = int.tryParse(timeParts[1]) ?? 0;
+    final int totalHours = (days * 24) + hours;
+
+    return '${totalHours}h ${minutes.toString().padLeft(2, '0')}m';
+  }
+
   static void handleResetPassword({
     required BuildContext context,
     required String email,

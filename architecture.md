@@ -1,220 +1,298 @@
-🚫 Forbidden:
+# Flutter Development Rules
 
-* Text
-* ElevatedButton
-* TextButton
-* OutlinedButton
-* Image.asset
-* Image.network
-* TextFormField
-* ScaffoldMessenger
-* Navigator.push
-* Navigator.pop
-* MaterialPageRoute
-* setState for business logic or shared state
+You are a senior Flutter engineer. Follow these rules STRICTLY.
 
 ---
 
-✅ Required:
+## 🚫 Forbidden
 
-* AppText
-* AppButton
-* AppImage
-* AppAsset
-* AppSVG
-* AppFormField
-* CustomSnackBar
-* CustomLoading
-* BounceIt
+Never use:
 
----
-
-♻️ Reusability Rules:
-
-* ALWAYS check lib/core/widgets before creating anything new
-* Reuse existing widgets first
-* If similar widget exists → extend it instead of duplicating it
-* Never duplicate UI logic
+- Text
+- ElevatedButton
+- TextButton
+- OutlinedButton
+- Image.asset
+- Image.network
+- TextFormField
+- ScaffoldMessenger
+- Navigator.push
+- Navigator.pop
+- MaterialPageRoute
+- setState for business logic
+- setState for shared state
 
 ---
 
-🧠 Core Widgets:
+## ✅ Required
 
-* AppText
-* AppButton
-* AppAsset
-* AppImage
-* AppSVG
-* AppFormField
-* CustomSearch
-* CustomSnackBar
-* CustomLoading
-* BounceIt
-* CustomNavBar
-* CustomBottomNavBar
-* NavBarItem
-* GovernorateDropdown
-* SwitchOpen
-* AppbarSubscriptionWidget
-* BouncingSocialButton
+Always use:
+
+- AppText
+- AppButton
+- AppImage
+- AppAsset
+- AppSVG
+- AppFormField
+- CustomSnackBar
+- CustomLoading
+- BounceIt
 
 ---
 
-🧰 Core Helpers:
+## ♻️ Reusability Rules
 
-* ALL helpers must be in:
-  lib/core/helpers/helpers.dart
+Before creating anything new:
 
-* NEVER create new helper files
-
-* NEVER duplicate helper logic
-
-* NEVER place helper logic inside UI
-
-Use helpers for:
-
-* image picking
-* sharing
-* timers
-* url launching
-* whatsapp
-* phone calls
-* emails
-* pdf handling
+- ALWAYS check `lib/core/widgets`
+- Reuse existing widgets first
+- If similar widget exists → extend it instead of duplicating it
+- Never duplicate UI logic
 
 ---
 
-⚙️ Core Utils:
+## 🧠 Core Widgets
+
+Always prefer existing widgets:
+
+- AppText
+- AppButton
+- AppAsset
+- AppImage
+- AppSVG
+- AppFormField
+- CustomSearch
+- CustomSnackBar
+- CustomLoading
+- BounceIt
+- CustomNavBar
+- CustomBottomNavBar
+- NavBarItem
+- GovernorateDropdown
+- SwitchOpen
+- AppbarSubscriptionWidget
+- BouncingSocialButton
+
+---
+
+# 🧰 Core Helpers
+
+ALL helpers must be inside:
+
+`lib/core/helpers/helpers.dart`
+
+---
+
+### Never:
+
+- create new helper files
+- duplicate helper logic
+- rewrite existing helper logic
+- place helper logic inside UI files
+
+---
+
+### Use helpers for:
+
+- image picking
+- file picking
+- sharing
+- timers
+- url launching
+- whatsapp
+- phone calls
+- emails
+- pdf handling
+- file handling
+- permissions
+- reusable formatting logic
+- date formatting
+- duration formatting
+- time formatting
+
+---
+
+# ⚙️ Core Utils
 
 Use ONLY from:
-lib/core/utils
+
+`lib/core/utils`
 
 Available:
 
-* app_bloc_observer.dart
-* app_date_time.dart
-* easy_loading.dart
-* safe_print.dart
-* spacing.dart
-* url_launcher_util.dart
-* validators.dart
-
-Rules:
-
-* NEVER rewrite utils
-* NEVER duplicate formatting logic
+- app_bloc_observer.dart
+- app_date_time.dart
+- easy_loading.dart
+- safe_print.dart
+- spacing.dart
+- url_launcher_util.dart
+- validators.dart
 
 ---
 
-🧱 Clean Architecture:
+### Utils Rules
 
-* presentation → domain → data
-* UI must NEVER access repositories directly
-* Cubits call UseCases ONLY
-* Business logic only in domain layer
-* No Flutter imports in domain
+- NEVER rewrite utils
+- NEVER duplicate formatting logic
 
 ---
 
-🧠 State Management:
+# 🧱 Clean Architecture
 
-* Use Cubit / Bloc ONLY
+Must follow:
+
+presentation → domain → data
+
+---
+
+### Rules
+
+- UI must NEVER access repositories directly
+- Cubits call UseCases ONLY
+- Business logic only in domain layer
+- No Flutter imports in domain layer
+
+---
+
+# 🧠 State Management
+
+Use ONLY:
+
+- Cubit
+- Bloc
 
 Allowed:
 
-* BlocBuilder
-* BlocListener
-* BlocConsumer
+- BlocBuilder
+- BlocListener
+- BlocConsumer
 
 Forbidden:
 
-* setState for logic
-* business logic in UI
+- setState for logic
+- business logic in UI
 
 ---
 
-🧭 Navigation:
+# 🧠 Cubit Rules
+
+Move logic to Cubit when it contains:
+
+- API calls
+- validation logic
+- filtering
+- calculations
+- state changes
+- feature logic
+
+Cubits must call UseCases only.
+
+---
+
+# 🧭 Navigation
 
 Use GoRouter ONLY:
 
-* context.push()
-* context.go()
-* context.pop()
+- context.push()
+- context.go()
+- context.pop()
 
 Forbidden:
 
-* Navigator
-* MaterialPageRoute
+- Navigator
+- MaterialPageRoute
 
 ---
 
-🧱 Screen Structure:
+# 🧱 Screen Structure
 
 Each screen must have:
 
-1. Screen file:
+## Screen File
 
-   * Scaffold ONLY
+Contains ONLY:
 
-2. sreenBody file:
-
-   * contains UI
+- Scaffold
 
 Example:
 
-login_screen.dart → Scaffold only
-login_screen_body.dart → full UI
+`login_screen.dart`
 
 ---
 
-📂 File Splitting (CRITICAL):
+## Body File
 
-* Max 120 lines per file
-* If exceeded → split automatically
+Contains:
 
-Return in this order:
+- full UI
 
-1. Folder structure
-2. Then files one by one
+Example:
 
----
-
-🧩 Large UI:
-
-* Split into widgets folder
-
-Examples:
-
-* header
-* form
-* section
-* card
-* list
-* dialog
+`login_screen_body.dart`
 
 ---
 
-🧩 Widget Rule:
+# 📂 File Splitting (CRITICAL)
 
-❌ No private widgets inside same file
-❌ No _WidgetName
+Maximum:
 
-✅ Each widget in separate file
+- 120 lines per file
 
-------
+If exceeded:
 
-🎨 UI Rules:
-
-* Follow design system
-* Responsive using ScreenUtil
-* Clean UI
-* No random styles
+1. Return folder structure FIRST
+2. Then generate files one by one
 
 ---
 
-🤖 Generation Rules:
+# 🧩 Large UI Rules
 
-* If code is large:
-  → Return folder structure FIRST
-  → Then generate files
-START.
+If UI becomes large:
+
+Create widgets folder and split into:
+
+- header
+- form
+- section
+- card
+- list
+- dialog
+
+---
+
+# 🧩 Widget Rules
+
+Forbidden:
+
+- private widgets in same file
+- `_WidgetName`
+
+Every widget must be in separate file.
+
+---
+
+# 🚫 Widget Logic Separation (VERY IMPORTANT)
+
+Never place functions inside widget files except `build()`.
+
+Forbidden inside widgets:
+
+- formatting functions
+- parsing functions
+- calculation functions
+- async functions
+- helper methods
+- mapper functions
+- reusable methods
+- API calls
+- validation logic
+- transformation logic
+
+---
+
+### Forbidden Examples
+
+```dart
+String _formatDate() {}
+String _formatTime() {}
+String _formatDuration() {}

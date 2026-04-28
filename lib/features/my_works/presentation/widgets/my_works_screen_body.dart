@@ -29,7 +29,10 @@ class MyWorksScreenBody extends StatelessWidget {
                   }
 
                   if (state is MyWorkOverviewLoaded) {
-                    return MyWorksContentSection(overview: state.overview);
+                    return MyWorksContentSection(
+                      overview: state.overview,
+                      reportsPage: state.reportsPage,
+                    );
                   }
 
                   if (state is MyWorkOverviewError) {

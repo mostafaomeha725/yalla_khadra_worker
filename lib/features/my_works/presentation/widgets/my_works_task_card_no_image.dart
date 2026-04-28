@@ -68,7 +68,7 @@ class MyWorksTaskCardNoImage extends StatelessWidget {
                 horizontalSpacing(6),
                 Expanded(
                   child: AppText(
-                    'Yesterday, $time',
+                    time,
                     style: font12w400.copyWith(color: const Color(0xFF6B7280)),
                   ),
                 ),

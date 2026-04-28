@@ -6,7 +6,22 @@ import 'package:yallakhadra/core/widgets/custom_button.dart';
 import 'package:yallakhadra/core/widgets/custom_text.dart';
 
 class ReportsPaginationCard extends StatelessWidget {
-  const ReportsPaginationCard({super.key});
+  final int currentPage;
+  final int totalPages;
+  final bool hasPreviousPage;
+  final bool hasNextPage;
+  final VoidCallback? onPreviousPressed;
+  final VoidCallback? onNextPressed;
+
+  const ReportsPaginationCard({
+    super.key,
+    this.currentPage = 1,
+    this.totalPages = 1,
+    this.hasPreviousPage = false,
+    this.hasNextPage = false,
+    this.onPreviousPressed,
+    this.onNextPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +40,14 @@ class ReportsPaginationCard extends StatelessWidget {
             flex: 2,
             child: AppButton(
               text: 'Prev',
-              onPressed: () {},
+              onPressed: hasPreviousPage ? onPreviousPressed : null,
               height: 42.h,
               radius: 22.r,
               textSize: 12.sp,
               textWeight: FontWeight.w600,
-              color: const Color(0xFF10B981),
+              color: hasPreviousPage
+                  ? const Color(0xFF10B981)
+                  : const Color(0xFFE5E7EB),
             ),
           ),
           horizontalSpacing(8),
@@ -39,12 +56,12 @@ class ReportsPaginationCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 AppText(
-                  'Page 2 of',
+                  'Page $currentPage of',
                   alignment: AlignmentDirectional.center,
                   style: font10w500.copyWith(color: const Color(0xFF6B7280)),
                 ),
                 AppText(
-                  '3',
+                  '$totalPages',
                   alignment: AlignmentDirectional.center,
                   style: font10w700.copyWith(color: const Color(0xFF111827)),
                 ),
@@ -56,12 +73,14 @@ class ReportsPaginationCard extends StatelessWidget {
             flex: 2,
             child: AppButton(
               text: 'Next',
-              onPressed: () {},
+              onPressed: hasNextPage ? onNextPressed : null,
               height: 42.h,
               radius: 22.r,
               textSize: 12.sp,
               textWeight: FontWeight.w600,
-              color: const Color(0xFF10B981),
+              color: hasNextPage
+                  ? const Color(0xFF10B981)
+                  : const Color(0xFFE5E7EB),
             ),
           ),
         ],
