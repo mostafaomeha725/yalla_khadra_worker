@@ -1,198 +1,220 @@
-# Flutter Architecture Guidelines
+🚫 Forbidden:
 
-All generated code in this repository MUST follow these rules.
-
----
-
-# Architecture
-
-Use Clean Architecture with a feature-first structure.
-
-Layers:
-
-* presentation
-* domain
-* data
-
-Dependency direction:
-presentation → domain → data
-
-Rules:
-
-* UI must never access the data layer directly.
-* Business logic must exist only in the domain layer.
-* Each layer must be independent.
+* Text
+* ElevatedButton
+* TextButton
+* OutlinedButton
+* Image.asset
+* Image.network
+* TextFormField
+* ScaffoldMessenger
+* Navigator.push
+* Navigator.pop
+* MaterialPageRoute
+* setState for business logic or shared state
 
 ---
 
-# State Management
+✅ Required:
 
-Use Cubit from flutter_bloc.
-
-Each feature must contain:
-
-* cubit
-* state
-
-Rules:
-
-* Cubits must only call UseCases.
-* Cubits must not access repositories directly.
-* Cubits must not contain business logic.
+* AppText
+* AppButton
+* AppImage
+* AppAsset
+* AppSVG
+* AppFormField
+* CustomSnackBar
+* CustomLoading
+* BounceIt
 
 ---
 
-# Dependency Injection
+♻️ Reusability Rules:
 
-Use **Service Locator** for dependency injection.
+* ALWAYS check lib/core/widgets before creating anything new
+* Reuse existing widgets first
+* If similar widget exists → extend it instead of duplicating it
+* Never duplicate UI logic
+
+---
+
+🧠 Core Widgets:
+
+* AppText
+* AppButton
+* AppAsset
+* AppImage
+* AppSVG
+* AppFormField
+* CustomSearch
+* CustomSnackBar
+* CustomLoading
+* BounceIt
+* CustomNavBar
+* CustomBottomNavBar
+* NavBarItem
+* GovernorateDropdown
+* SwitchOpen
+* AppbarSubscriptionWidget
+* BouncingSocialButton
+
+---
+
+🧰 Core Helpers:
+
+* ALL helpers must be in:
+  lib/core/helpers/helpers.dart
+
+* NEVER create new helper files
+
+* NEVER duplicate helper logic
+
+* NEVER place helper logic inside UI
+
+Use helpers for:
+
+* image picking
+* sharing
+* timers
+* url launching
+* whatsapp
+* phone calls
+* emails
+* pdf handling
+
+---
+
+⚙️ Core Utils:
+
+Use ONLY from:
+lib/core/utils
+
+Available:
+
+* app_bloc_observer.dart
+* app_date_time.dart
+* easy_loading.dart
+* safe_print.dart
+* spacing.dart
+* url_launcher_util.dart
+* validators.dart
 
 Rules:
 
-* All dependencies must be registered in the Service Locator.
-* Use existing Service Locator setup from the project.
-* Do NOT create new dependency systems.
+* NEVER rewrite utils
+* NEVER duplicate formatting logic
+
+---
+
+🧱 Clean Architecture:
+
+* presentation → domain → data
+* UI must NEVER access repositories directly
+* Cubits call UseCases ONLY
+* Business logic only in domain layer
+* No Flutter imports in domain
+
+---
+
+🧠 State Management:
+
+* Use Cubit / Bloc ONLY
+
+Allowed:
+
+* BlocBuilder
+* BlocListener
+* BlocConsumer
+
+Forbidden:
+
+* setState for logic
+* business logic in UI
+
+---
+
+🧭 Navigation:
+
+Use GoRouter ONLY:
+
+* context.push()
+* context.go()
+* context.pop()
+
+Forbidden:
+
+* Navigator
+* MaterialPageRoute
+
+---
+
+🧱 Screen Structure:
+
+Each screen must have:
+
+1. Screen file:
+
+   * Scaffold ONLY
+
+2. sreenBody file:
+
+   * contains UI
 
 Example:
-Use the existing `service_locator.dart` file in `core/`.
+
+login_screen.dart → Scaffold only
+login_screen_body.dart → full UI
 
 ---
 
-# Code Reuse (VERY IMPORTANT)
+📂 File Splitting (CRITICAL):
 
-Before creating new code ALWAYS check existing code and reuse it.
+* Max 120 lines per file
+* If exceeded → split automatically
 
-Rules:
+Return in this order:
 
-* Reuse existing **custom widgets** if they already exist.
-* Reuse utilities from the **core** folder.
-* Reuse existing **error handling**, **network clients**, and **helpers**.
-* Do NOT duplicate components that already exist.
-
-Priority:
-
-1. Use existing widgets
-2. Use existing helpers/utilities
-3. Use existing services
-4. Only create new code if nothing suitable exists
+1. Folder structure
+2. Then files one by one
 
 ---
 
-# Folder Structure
+🧩 Large UI:
 
-lib/
-core/
-errors/
-usecases/
-utils/
-widgets/
-services/
-di/
-cache/
-constants/
-enums/
-extensions/
-theme/
-network/
-routes/
+* Split into widgets folder
 
-features/
-feature_name/
-data/
-models/
-datasources/
-repositories/
-domain/
-entities/
-repositories/
-usecases/
-presentation/
-cubit/
-screens/
-widgets/
+Examples:
+
+* header
+* form
+* section
+* card
+* list
+* dialog
 
 ---
 
-# Domain Layer
+🧩 Widget Rule:
 
-Contains:
+❌ No private widgets inside same file
+❌ No _WidgetName
 
-* Entities
-* Repository interfaces
-* UseCases
+✅ Each widget in separate file
 
-Rules:
+------
 
-* Must NOT depend on Flutter.
-* Must NOT depend on external frameworks.
-* Must contain pure business logic.
+🎨 UI Rules:
 
----
-
-# Data Layer
-
-Contains:
-
-* Models
-* Data Sources
-* Repository Implementations
-
-Rules:
-
-* Models map to domain entities.
-* Data sources handle API / local storage.
+* Follow design system
+* Responsive using ScreenUtil
+* Clean UI
+* No random styles
 
 ---
 
-# Presentation Layer
+🤖 Generation Rules:
 
-Contains:
-
-* Cubits
-* Screens
-* Widgets
-
-Rules:
-
-* Presentation depends only on the domain layer.
-* UI must stay clean and simple.
-* No business logic inside UI.
-
----
-
-# Code Rules
-
-Follow these principles:
-
-* SOLID principles
-* Clean and readable code
-* Small reusable classes
-* Single responsibility per class
-* Proper naming conventions
-* Avoid duplicate code
-* Reuse existing project components whenever possible
-
----
-
-# Feature Generation
-
-When creating a new feature generate the full structure:
-
-feature_name/
-data/
-models/
-datasources/
-repositories/
-domain/
-entities/
-repositories/
-usecases/
-presentation/
-cubit/
-screens/
-widgets/
-
-Also:
-
-* Register dependencies in Service Locator
-* Reuse existing widgets and utilities
-* Follow all architecture rules
+* If code is large:
+  → Return folder structure FIRST
+  → Then generate files
+START.
