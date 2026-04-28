@@ -285,6 +285,24 @@ class Helpers {
     return null;
   }
 
+  static Future<File?> pickImageFromGallery() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image == null) {
+      return null;
+    }
+    return File(image.path);
+  }
+
+  static Future<File?> pickImageFromCamera() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.camera);
+    if (image == null) {
+      return null;
+    }
+    return File(image.path);
+  }
+
   static Future<List<File>> getImages() async {
     final ImagePicker picker = ImagePicker();
     final List<XFile> result = await picker.pickMultiImage();

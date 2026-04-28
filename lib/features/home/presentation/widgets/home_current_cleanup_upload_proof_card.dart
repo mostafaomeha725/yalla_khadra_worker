@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yallakhadra/core/theme/styles.dart';
@@ -6,7 +8,18 @@ import 'package:yallakhadra/core/widgets/custom_text.dart';
 import 'package:yallakhadra/features/home/presentation/widgets/home_cleanup_media_action_button.dart';
 
 class HomeCurrentCleanupUploadProofCard extends StatelessWidget {
-  const HomeCurrentCleanupUploadProofCard({super.key});
+  final VoidCallback onCameraPressed;
+  final VoidCallback onGalleryPressed;
+  final List<String> selectedImagePaths;
+  final ValueChanged<int> onRemoveImage;
+
+  const HomeCurrentCleanupUploadProofCard({
+    super.key,
+    required this.onCameraPressed,
+    required this.onGalleryPressed,
+    required this.selectedImagePaths,
+    required this.onRemoveImage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +48,7 @@ class HomeCurrentCleanupUploadProofCard extends StatelessWidget {
                 backgroundColor: const Color(0xFFF0FDF4),
                 borderColor: const Color(0xFF6EE7B7),
                 textColor: const Color(0xFF059669),
-                onPressed: () {},
+                onPressed: onCameraPressed,
               ),
               horizontalSpacing(12),
               HomeCleanupMediaActionButton(
@@ -45,10 +58,56 @@ class HomeCurrentCleanupUploadProofCard extends StatelessWidget {
                 backgroundColor: const Color(0xFFEFF6FF),
                 borderColor: const Color(0xFF93C5FD),
                 textColor: const Color(0xFF2563EB),
-                onPressed: () {},
+                onPressed: onGalleryPressed,
               ),
             ],
           ),
+          if (selectedImagePaths.isNotEmpty) ...[
+            SizedBox(height: 12.h),
+            SizedBox(
+              height: 84.h,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: selectedImagePaths.length,
+                separatorBuilder: (context, index) => SizedBox(width: 8.w),
+                itemBuilder: (context, index) {
+                  return Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10.r),
+                        child: Image.file(
+                          File(selectedImagePaths[index]),
+                          width: 84.w,
+                          height: 84.h,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Positioned(
+                        top: 4.h,
+                        right: 4.w,
+                        child: GestureDetector(
+                          onTap: () => onRemoveImage(index),
+                          child: Container(
+                            width: 22.w,
+                            height: 22.h,
+                            decoration: const BoxDecoration(
+                              color: Color(0xCC0F172A),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 14.sp,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
         ],
       ),
     );

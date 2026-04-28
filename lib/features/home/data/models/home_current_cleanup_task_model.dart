@@ -1,4 +1,5 @@
 class HomeCurrentCleanupTaskModel {
+  final int taskId;
   final String address;
   final String wasteType;
   final String imageUrl;
@@ -8,6 +9,7 @@ class HomeCurrentCleanupTaskModel {
   final double longitude;
 
   const HomeCurrentCleanupTaskModel({
+    required this.taskId,
     required this.address,
     required this.wasteType,
     required this.imageUrl,
@@ -34,6 +36,7 @@ class HomeCurrentCleanupTaskModel {
     final int wasteTypeValue = (report['wasteType'] as num?)?.toInt() ?? 0;
 
     return HomeCurrentCleanupTaskModel(
+      taskId: (json['id'] as num?)?.toInt() ?? 0,
       address: (report['address'] as String?) ?? '',
       wasteType: mapWasteTypeName(wasteTypeValue),
       imageUrl: imageUrl,

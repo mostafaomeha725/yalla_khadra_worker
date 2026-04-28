@@ -1,4 +1,5 @@
 class HomeCleanupTaskEntity {
+  final int taskId;
   final String title;
   final String subTitle;
   final String distance;
@@ -12,6 +13,7 @@ class HomeCleanupTaskEntity {
   final String locationQuery;
 
   const HomeCleanupTaskEntity({
+    this.taskId = 0,
     required this.title,
     required this.subTitle,
     required this.distance,

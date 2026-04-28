@@ -7,4 +7,11 @@ abstract class HomeRemoteDataSource {
   Future<Either<Failure, HomeMainOverviewModel>> getMainOverview();
 
   Future<Either<Failure, HomeCurrentCleanupTaskModel?>> getMyUncompletedTask();
+
+  Future<Either<Failure, void>> completeCleanupTask({
+    required int taskId,
+    required int finalWasteType,
+    required String finalWeightInKg,
+    required List<String> imagePaths,
+  });
 }

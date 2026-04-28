@@ -36,6 +36,7 @@ class HomeDashboardContent extends StatelessWidget {
     }
 
     final HomeDashboardEntity data = dashboard!;
+    final bool hasCurrentCleanup = data.currentCleanup.taskId > 0;
 
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 14.h),
@@ -48,8 +49,10 @@ class HomeDashboardContent extends StatelessWidget {
             avgHours: data.avgHours,
             completedCount: data.completedCount,
           ),
-          verticalSpacing(36),
-          HomeCurrentCleanupSection(task: data.currentCleanup),
+          if (hasCurrentCleanup) ...[
+            verticalSpacing(36),
+            HomeCurrentCleanupSection(task: data.currentCleanup),
+          ],
           verticalSpacing(36),
           HomeNearbyReportsSection(reports: data.nearbyReports),
           verticalSpacing(92),

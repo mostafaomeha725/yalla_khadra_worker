@@ -23,3 +23,19 @@ class HomeError extends HomeState {
 
   const HomeError(this.message);
 }
+
+class HomeCleanupTaskCompleting extends HomeState {
+  const HomeCleanupTaskCompleting();
+}
+
+class HomeCleanupTaskCompleted extends HomeState {
+  final String message;
+
+  const HomeCleanupTaskCompleted(this.message);
+}
+
+class HomeCleanupTaskCompleteError extends HomeState {
+  final String message;
+
+  const HomeCleanupTaskCompleteError(this.message);
+}

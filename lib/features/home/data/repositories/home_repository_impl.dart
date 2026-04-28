@@ -44,6 +44,7 @@ class HomeRepositoryImpl implements HomeRepository {
       avgHours: overview.averageHours,
       completedCount: overview.completedCleanupsCount,
       currentCleanup: HomeCleanupTaskEntity(
+        taskId: currentCleanup?.taskId ?? 0,
         title: currentCleanup?.address ?? 'No Active Cleanup',
         subTitle: '',
         distance: distance,
@@ -87,5 +88,22 @@ class HomeRepositoryImpl implements HomeRepository {
         ),
       ],
     );
+  }
+
+  @override
+  Future<void> completeCleanupTask({
+    required int taskId,
+    required int finalWasteType,
+    required String finalWeightInKg,
+    required List<String> imagePaths,
+  }) async {
+    final result = await _remoteDataSource.completeCleanupTask(
+      taskId: taskId,
+      finalWasteType: finalWasteType,
+      finalWeightInKg: finalWeightInKg,
+      imagePaths: imagePaths,
+    );
+
+    result.fold((failure) => throw Exception(failure.message), (_) => null);
   }
 }

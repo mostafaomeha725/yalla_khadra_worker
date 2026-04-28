@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yallakhadra/features/home/data/repositories/home_repository_impl.dart';
 import 'package:yallakhadra/features/home/domain/entities/home_cleanup_task_entity.dart';
+import 'package:yallakhadra/features/home/domain/usecases/complete_cleanup_task_use_case.dart';
+import 'package:yallakhadra/features/home/domain/usecases/get_home_dashboard_use_case.dart';
+import 'package:yallakhadra/features/home/presentation/cubit/home_cubit.dart';
 import 'package:yallakhadra/features/home/presentation/widgets/home_current_cleanup_body.dart';
 
 class HomeCurrentCleanupScreen extends StatelessWidget {
@@ -9,6 +14,18 @@ class HomeCurrentCleanupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: HomeCurrentCleanupBody(task: task));
+    return Scaffold(
+      body: BlocProvider(
+        create: (_) => HomeCubit(
+          getHomeDashboardUseCase: GetHomeDashboardUseCase(
+            HomeRepositoryImpl(),
+          ),
+          completeCleanupTaskUseCase: CompleteCleanupTaskUseCase(
+            HomeRepositoryImpl(),
+          ),
+        ),
+        child: HomeCurrentCleanupBody(task: task),
+      ),
+    );
   }
 }
