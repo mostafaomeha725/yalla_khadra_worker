@@ -31,7 +31,9 @@ class HomeReportDetailsBody extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(22.w, 12.h, 22.w, 130.h),
                 child: Column(
                   children: [
-                    HomeReportImageSliderCard(imageUrl: report.imageUrl),
+                    HomeReportImageSliderCard(
+                      imageUrls: <String>[report.imageUrl],
+                    ),
                     SizedBox(height: 12.h),
                     HomeReportInformationCard(report: report),
                     SizedBox(height: 12.h),

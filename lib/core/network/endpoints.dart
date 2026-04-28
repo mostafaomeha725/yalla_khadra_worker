@@ -33,6 +33,8 @@ class EndPoints {
   static const String aiWasteScan = '/AIWasteScan';
   static const String aiWasteScanMy = '/AIWasteScan/my';
   static const String cleanupTaskMainOverview = '/CleanupTask/main-overview';
+  static const String cleanupTaskMyUncompletedTasks =
+      '/CleanupTask/my-uncompleted-tasks';
   static const String cleanupTaskMyWorkOverview =
       '/CleanupTask/my-work-overview';
   static const String wasteReportMyWork = '/WasteReport/my-work';

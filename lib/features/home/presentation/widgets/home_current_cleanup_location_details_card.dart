@@ -8,10 +8,12 @@ import 'package:yallakhadra/features/home/presentation/widgets/home_report_locat
 
 class HomeCurrentCleanupLocationDetailsCard extends StatelessWidget {
   final HomeNearbyReportEntity report;
+  final String locationQuery;
 
   const HomeCurrentCleanupLocationDetailsCard({
     super.key,
     required this.report,
+    required this.locationQuery,
   });
 
   @override
@@ -45,7 +47,7 @@ class HomeCurrentCleanupLocationDetailsCard extends StatelessWidget {
             value: report.wasteType,
           ),
           HomeReportLocationMapCard(
-            locationQuery: report.title,
+            locationQuery: locationQuery,
             title: '',
             showTitle: false,
             cardPadding: EdgeInsets.zero,

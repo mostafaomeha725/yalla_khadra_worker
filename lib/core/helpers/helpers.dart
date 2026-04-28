@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
@@ -15,6 +16,67 @@ import 'package:yallakhadra/core/utils/validators.dart';
 import 'package:yallakhadra/core/widgets/custom_loading.dart';
 
 class Helpers {
+  static String formatTakenTimeAgo(String dateTimeString) {
+    final DateTime? parsed = DateTime.tryParse(dateTimeString);
+    if (parsed == null) {
+      return 'Taken recently';
+    }
+
+    final Duration diff = DateTime.now().difference(parsed.toLocal());
+    if (diff.inMinutes < 1) {
+      return 'Taken just now';
+    }
+    if (diff.inMinutes < 60) {
+      final int m = diff.inMinutes;
+      return 'Taken $m ${m == 1 ? 'minute' : 'minutes'} ago';
+    }
+    if (diff.inHours < 24) {
+      final int h = diff.inHours;
+      return 'Taken $h ${h == 1 ? 'hour' : 'hours'} ago';
+    }
+    final int d = diff.inDays;
+    return 'Taken $d ${d == 1 ? 'day' : 'days'} ago';
+  }
+
+  static Future<String> formatDistanceFromCurrentLocation({
+    required double targetLatitude,
+    required double targetLongitude,
+  }) async {
+    if (targetLatitude == 0 && targetLongitude == 0) {
+      return 'Distance unavailable';
+    }
+
+    final bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return 'Location is off';
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      return 'Location permission required';
+    }
+
+    final Position position = await Geolocator.getCurrentPosition();
+    final double meters = Geolocator.distanceBetween(
+      position.latitude,
+      position.longitude,
+      targetLatitude,
+      targetLongitude,
+    );
+
+    if (meters < 1000) {
+      return '${meters.round()} m away';
+    }
+
+    final double km = meters / 1000;
+    return '${km.toStringAsFixed(1)} km away';
+  }
+
   static String formatMyWorkCompletedAt(String completedAt) {
     final DateTime? dateTime = DateTime.tryParse(completedAt);
     if (dateTime == null) {

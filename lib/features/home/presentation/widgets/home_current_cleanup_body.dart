@@ -18,6 +18,9 @@ class HomeCurrentCleanupBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String locationQuery = task.locationQuery.trim().isEmpty
+        ? task.title
+        : task.locationQuery;
     final HomeNearbyReportEntity report = HomeNearbyReportEntity(
       title: '${task.title} ${task.subTitle}',
       distance: task.distance.replaceAll(' away', ''),
@@ -41,9 +44,16 @@ class HomeCurrentCleanupBody extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(14.w, 12.h, 14.w, 130.h),
                 child: Column(
                   children: [
-                    HomeReportImageSliderCard(imageUrl: task.imageUrl),
+                    HomeReportImageSliderCard(
+                      imageUrls: task.imageUrls.isEmpty
+                          ? <String>[task.imageUrl]
+                          : task.imageUrls,
+                    ),
                     SizedBox(height: 12.h),
-                    HomeCurrentCleanupLocationDetailsCard(report: report),
+                    HomeCurrentCleanupLocationDetailsCard(
+                      report: report,
+                      locationQuery: locationQuery,
+                    ),
                     SizedBox(height: 12.h),
                     const HomeCurrentCleanupUploadProofCard(),
                     SizedBox(height: 12.h),

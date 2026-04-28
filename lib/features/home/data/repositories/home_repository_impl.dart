@@ -1,7 +1,9 @@
 import 'package:yallakhadra/core/di/services_locator.dart';
+import 'package:yallakhadra/core/helpers/helpers.dart';
 import 'package:yallakhadra/core/network/network_service.dart';
 import 'package:yallakhadra/features/home/data/data_sources/home_remote_data_source.dart';
 import 'package:yallakhadra/features/home/data/data_sources/home_remote_data_source_impl.dart';
+import 'package:yallakhadra/features/home/data/models/home_current_cleanup_task_model.dart';
 import 'package:yallakhadra/features/home/data/models/home_main_overview_model.dart';
 import 'package:yallakhadra/features/home/domain/entities/home_cleanup_task_entity.dart';
 import 'package:yallakhadra/features/home/domain/entities/home_dashboard_entity.dart';
@@ -18,24 +20,45 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<HomeDashboardEntity> getHomeDashboard() async {
     final overviewResult = await _remoteDataSource.getMainOverview();
+    final currentCleanupResult = await _remoteDataSource.getMyUncompletedTask();
+
     final HomeMainOverviewModel overview = overviewResult.fold(
       (failure) => throw Exception(failure.message),
       (model) => model,
     );
 
+    final HomeCurrentCleanupTaskModel? currentCleanup = currentCleanupResult
+        .fold((failure) => null, (model) => model);
+    final String distance = currentCleanup == null
+        ? 'Distance unavailable'
+        : await Helpers.formatDistanceFromCurrentLocation(
+            targetLatitude: currentCleanup.latitude,
+            targetLongitude: currentCleanup.longitude,
+          );
+    final String takenTime = currentCleanup == null
+        ? 'Taken recently'
+        : Helpers.formatTakenTimeAgo(currentCleanup.timeAgo);
+
     return HomeDashboardEntity(
       workerName: 'Ahmed',
       avgHours: overview.averageHours,
       completedCount: overview.completedCleanupsCount,
-      currentCleanup: const HomeCleanupTaskEntity(
-        title: 'Al Wahda Street, near',
-        subTitle: 'City Mall',
-        distance: '0.8 km away',
-        wasteType: 'Plastic Bottles',
+      currentCleanup: HomeCleanupTaskEntity(
+        title: currentCleanup?.address ?? 'No Active Cleanup',
+        subTitle: '',
+        distance: distance,
+        wasteType: currentCleanup?.wasteType ?? 'Unknown',
         status: 'In Progress',
-        timeAgo: 'Taken 1 hour ago',
-        imageUrl:
-            'https://images.pexels.com/photos/3735657/pexels-photo-3735657.jpeg?auto=compress&cs=tinysrgb&w=600',
+        timeAgo: takenTime,
+        imageUrl: currentCleanup?.imageUrl.isNotEmpty == true
+            ? currentCleanup!.imageUrl
+            : 'https://images.pexels.com/photos/3735657/pexels-photo-3735657.jpeg?auto=compress&cs=tinysrgb&w=600',
+        imageUrls: currentCleanup?.imageUrls ?? const <String>[],
+        latitude: currentCleanup?.latitude ?? 0,
+        longitude: currentCleanup?.longitude ?? 0,
+        locationQuery: currentCleanup?.address.trim().isNotEmpty == true
+            ? currentCleanup!.address
+            : '${currentCleanup?.latitude ?? 0},${currentCleanup?.longitude ?? 0}',
       ),
       nearbyReports: [
         const HomeNearbyReportEntity(
