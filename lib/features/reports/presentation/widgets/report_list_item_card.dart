@@ -15,6 +15,7 @@ class ReportListItemCard extends StatelessWidget {
     required this.distance,
     required this.timeAgo,
     required this.wasteType,
+    required this.onPressed,
   });
 
   final String imageUrl;
@@ -22,11 +23,12 @@ class ReportListItemCard extends StatelessWidget {
   final String distance;
   final String timeAgo;
   final String wasteType;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
     return BounceIt(
-      onPressed: () {},
+      onPressed: onPressed,
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.all(18.w),

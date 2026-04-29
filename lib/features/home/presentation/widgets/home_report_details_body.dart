@@ -16,6 +16,10 @@ class HomeReportDetailsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> sliderImages = report.imageUrls.isNotEmpty
+        ? report.imageUrls
+        : <String>[report.imageUrl];
+
     return Container(
       width: double.infinity,
       color: AppLightColors.defaultBackground,
@@ -31,9 +35,7 @@ class HomeReportDetailsBody extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(22.w, 12.h, 22.w, 130.h),
                 child: Column(
                   children: [
-                    HomeReportImageSliderCard(
-                      imageUrls: <String>[report.imageUrl],
-                    ),
+                    HomeReportImageSliderCard(imageUrls: sliderImages),
                     SizedBox(height: 12.h),
                     HomeReportInformationCard(report: report),
                     SizedBox(height: 12.h),

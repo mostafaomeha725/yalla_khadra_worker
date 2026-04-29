@@ -33,7 +33,7 @@ class HomeReportInformationCard extends StatelessWidget {
             iconColor: const Color(0xFF64748B),
             label: 'Location',
             value: report.title,
-            accentValue: '${report.distance} away',
+            accentValue: report.distance,
           ),
           HomeReportInformationItem(
             icon: Icons.inventory_2_outlined,

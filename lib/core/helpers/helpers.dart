@@ -16,6 +16,24 @@ import 'package:yallakhadra/core/utils/validators.dart';
 import 'package:yallakhadra/core/widgets/custom_loading.dart';
 
 class Helpers {
+  static String formatReportDate(String dateTimeString) {
+    final DateTime? parsed = DateTime.tryParse(dateTimeString);
+    if (parsed == null) {
+      return dateTimeString;
+    }
+
+    final DateTime local = parsed.toLocal();
+    final int hour12 = local.hour % 12 == 0 ? 12 : local.hour % 12;
+    final String hour = hour12.toString().padLeft(2, '0');
+    final String minute = local.minute.toString().padLeft(2, '0');
+    final String period = local.hour >= 12 ? 'PM' : 'AM';
+    final String day = local.day.toString().padLeft(2, '0');
+    final String month = local.month.toString().padLeft(2, '0');
+    final String year = local.year.toString();
+
+    return '$day/$month/$year • $hour:$minute $period';
+  }
+
   static String formatTakenTimeAgo(String dateTimeString) {
     final DateTime? parsed = DateTime.tryParse(dateTimeString);
     if (parsed == null) {

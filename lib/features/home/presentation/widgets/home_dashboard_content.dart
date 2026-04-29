@@ -54,7 +54,7 @@ class HomeDashboardContent extends StatelessWidget {
             HomeCurrentCleanupSection(tasks: data.currentCleanups),
           ],
           verticalSpacing(36),
-          HomeNearbyReportsSection(reports: data.nearbyReports),
+          const HomeNearbyReportsSection(),
           verticalSpacing(92),
         ],
       ),

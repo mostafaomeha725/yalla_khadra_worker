@@ -8,9 +8,11 @@ class CustomNavBar extends StatefulWidget {
 
   const CustomNavBar({super.key, this.isAdmin = true});
 
-  // ignore: library_private_types_in_public_api
-  static _CustomNavBarState? of(BuildContext context) =>
-      context.findAncestorStateOfType<_CustomNavBarState>();
+  static void switchToTab(BuildContext context, int index) {
+    final _CustomNavBarState? state = context
+        .findAncestorStateOfType<_CustomNavBarState>();
+    state?.switchToTab(index);
+  }
 
   @override
   State<CustomNavBar> createState() => _CustomNavBarState();
@@ -35,6 +37,13 @@ class _CustomNavBarState extends State<CustomNavBar> {
 
   void goBack() {
     _navState.goBack(() => setState(() {}));
+  }
+
+  void switchToTab(int index) {
+    if (index < 0 || index >= _screens.length) {
+      return;
+    }
+    _navState.onItemTapped(index, () => setState(() {}));
   }
 
   @override

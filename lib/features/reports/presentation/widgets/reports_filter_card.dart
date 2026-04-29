@@ -8,7 +8,16 @@ import 'package:yallakhadra/core/widgets/custom_button.dart';
 import 'package:yallakhadra/core/widgets/custom_text.dart';
 
 class ReportsFilterCard extends StatelessWidget {
-  const ReportsFilterCard({super.key});
+  final TextEditingController radiusController;
+  final VoidCallback onApplyPressed;
+  final ValueChanged<String>? onRadiusChanged;
+
+  const ReportsFilterCard({
+    super.key,
+    required this.radiusController,
+    required this.onApplyPressed,
+    this.onRadiusChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +48,7 @@ class ReportsFilterCard extends StatelessWidget {
                 ),
               ),
               AppText(
-                'Within 5 km',
+                'Radius is optional',
                 style: font10w500.copyWith(color: const Color(0xFF6B7280)),
               ),
             ],
@@ -51,9 +60,9 @@ class ReportsFilterCard extends StatelessWidget {
           ),
           verticalSpacing(8),
           AppFormField(
-            controller: TextEditingController(text: '5'),
-            hintText: '5',
-            readOnly: true,
+            controller: radiusController,
+            onChanged: onRadiusChanged,
+            hintText: 'Leave empty for no radius filter',
             fillColor: const Color(0xFFF9FAFB),
             borderColor: const Color(0xFFE5E7EB),
             radius: 10.r,
@@ -66,7 +75,7 @@ class ReportsFilterCard extends StatelessWidget {
           verticalSpacing(12),
           AppButton(
             text: 'Apply Filter',
-            onPressed: () {},
+            onPressed: onApplyPressed,
             height: 42.h,
             radius: 10.r,
             color: const Color(0xFF10B981),
