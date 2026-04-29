@@ -43,7 +43,7 @@ class HomeDashboardContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          HomeWelcomeBanner(workerName: data.workerName),
+          const HomeWelcomeBanner(),
           verticalSpacing(24),
           HomeOverviewSection(
             avgHours: data.avgHours,

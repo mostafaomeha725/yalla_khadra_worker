@@ -19,7 +19,7 @@ class MyWorksSummaryStatItem extends StatelessWidget {
       children: [
         AppText(
           value,
-          style: font30w700.copyWith(color: const Color(0xFFFFFFFF)),
+          style: font22w700.copyWith(color: const Color(0xFFFFFFFF)),
         ),
         AppText(
           label,

@@ -41,6 +41,7 @@ class AiScanPreviousScansSection extends StatelessWidget {
               AppText(
                 'No scans yet. Capture or upload an image to start.',
                 style: font12w400.copyWith(color: const Color(0xFF6B7280)),
+                alignment: AlignmentDirectional.center,
               ),
             ...scans.asMap().entries.map((entry) {
               final scan = entry.value;

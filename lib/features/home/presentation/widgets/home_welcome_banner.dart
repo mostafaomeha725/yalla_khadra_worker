@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yallakhadra/core/di/services_locator.dart';
+import 'package:yallakhadra/core/cache/preferences_storage.dart';
 import 'package:yallakhadra/core/theme/styles.dart';
 import 'package:yallakhadra/core/widgets/custom_text.dart';
 import 'package:yallakhadra/features/home/presentation/constants/home_strings.dart';
 
 class HomeWelcomeBanner extends StatelessWidget {
-  final String workerName;
-
-  const HomeWelcomeBanner({super.key, required this.workerName});
+  const HomeWelcomeBanner({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final String firstName = sl<PreferencesStorage>().getFirstName();
+
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
@@ -33,7 +35,7 @@ class HomeWelcomeBanner extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppText(
-            'Welcome back, $workerName',
+            'Welcome back, $firstName',
             style: font22w500.copyWith(color: Colors.white),
             alignment: AlignmentDirectional.center,
           ),
