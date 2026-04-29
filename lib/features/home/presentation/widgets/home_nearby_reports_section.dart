@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yallakhadra/core/enums/waste_type.dart';
 import 'package:yallakhadra/core/helpers/helpers.dart';
 import 'package:yallakhadra/core/utils/easy_loading.dart';
@@ -83,33 +84,54 @@ class HomeNearbyReportsSection extends StatelessWidget {
                 ],
               ),
               verticalSpacing(10),
-              Column(
-                children: List.generate(reports.length, (index) {
-                  final report = reports[index];
-                  final apiReport = loaded.page.reports[index];
-
-                  return FutureBuilder<String>(
-                    future: Helpers.formatDistanceFromCurrentLocation(
-                      targetLatitude: apiReport.latitude,
-                      targetLongitude: apiReport.longitude,
+              if (reports.isEmpty)
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20.h),
+                    child: AppText(
+                      'No reports available right now',
+                      style: font16w500.copyWith(
+                        color: const Color(0xFF6B7280),
+                      ),
+                      alignment: AlignmentDirectional.center,
                     ),
-                    builder: (context, snapshot) {
-                      return HomeNearbyReportCard(
-                        report: HomeNearbyReportEntity(
-                          title: report.title,
-                          distance:
-                              snapshot.data ??
-                              '${apiReport.latitude.toStringAsFixed(4)}, ${apiReport.longitude.toStringAsFixed(4)}',
-                          timeAgo: report.timeAgo,
-                          wasteType: report.wasteType,
-                          imageUrl: report.imageUrl,
-                          imageUrls: report.imageUrls,
-                        ),
-                      );
-                    },
-                  );
-                }).toList(),
-              ),
+                  ),
+                )
+              else
+                Column(
+                  children: List.generate(reports.length, (index) {
+                    final report = reports[index];
+                    final apiReport = loaded.page.reports[index];
+
+                    final double? userLat = context
+                        .read<ReportsCubit>()
+                        .latitude;
+                    final double? userLng = context
+                        .read<ReportsCubit>()
+                        .longitude;
+
+                    final String distanceText =
+                        (userLat != null && userLng != null)
+                        ? Helpers.formatDistanceFromLatLng(
+                            startLatitude: userLat,
+                            startLongitude: userLng,
+                            targetLatitude: apiReport.latitude,
+                            targetLongitude: apiReport.longitude,
+                          )
+                        : '';
+
+                    return HomeNearbyReportCard(
+                      report: HomeNearbyReportEntity(
+                        title: report.title,
+                        distance: distanceText,
+                        timeAgo: report.timeAgo,
+                        wasteType: report.wasteType,
+                        imageUrl: report.imageUrl,
+                        imageUrls: report.imageUrls,
+                      ),
+                    );
+                  }).toList(),
+                ),
               // ReportsPaginationCard(
               //   currentPage: loaded.page.currentPage,
               //   totalPages: loaded.page.totalPages,

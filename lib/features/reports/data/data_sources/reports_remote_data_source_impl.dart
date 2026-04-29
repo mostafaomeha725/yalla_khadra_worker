@@ -13,15 +13,15 @@ class ReportsRemoteDataSourceImpl implements ReportsRemoteDataSource {
 
   @override
   Future<Either<Failure, NearbyReportsPageModel>> getNearbyReports({
-    required double latitude,
-    required double longitude,
+    double? latitude,
+    double? longitude,
     double? radiusInKm,
     required int pageNumber,
     required int pageSize,
   }) async {
     final Map<String, dynamic> queryParameters = <String, dynamic>{
-      'Latitude': latitude,
-      'Longitude': longitude,
+      if (latitude != null) 'Latitude': latitude,
+      if (longitude != null) 'Longitude': longitude,
       if (radiusInKm != null) 'RadiusInKm': radiusInKm,
       'PageNumber': pageNumber,
       'PageSize': pageSize,

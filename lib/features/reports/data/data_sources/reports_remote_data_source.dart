@@ -4,8 +4,8 @@ import 'package:yallakhadra/features/reports/data/models/nearby_reports_page_mod
 
 abstract class ReportsRemoteDataSource {
   Future<Either<Failure, NearbyReportsPageModel>> getNearbyReports({
-    required double latitude,
-    required double longitude,
+    double? latitude,
+    double? longitude,
     double? radiusInKm,
     required int pageNumber,
     required int pageSize,

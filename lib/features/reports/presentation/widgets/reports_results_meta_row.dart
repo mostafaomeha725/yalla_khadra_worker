@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yallakhadra/core/theme/styles.dart';
-import 'package:yallakhadra/core/utils/spacing.dart';
-import 'package:yallakhadra/core/widgets/bouncing_widgets.dart';
 import 'package:yallakhadra/core/widgets/custom_text.dart';
 
 class ReportsResultsMetaRow extends StatelessWidget {

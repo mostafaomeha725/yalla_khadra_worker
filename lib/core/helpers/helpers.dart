@@ -16,6 +16,25 @@ import 'package:yallakhadra/core/utils/validators.dart';
 import 'package:yallakhadra/core/widgets/custom_loading.dart';
 
 class Helpers {
+  static Future<Position?> getUserLocation() async {
+    final bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return null;
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      return null;
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
+
   static String formatReportDate(String dateTimeString) {
     final DateTime? parsed = DateTime.tryParse(dateTimeString);
     if (parsed == null) {
@@ -54,6 +73,41 @@ class Helpers {
     }
     final int d = diff.inDays;
     return 'Taken $d ${d == 1 ? 'day' : 'days'} ago';
+  }
+
+  static double calculateDistance({
+    required double startLatitude,
+    required double startLongitude,
+    required double targetLatitude,
+    required double targetLongitude,
+  }) {
+    return Geolocator.distanceBetween(
+      startLatitude,
+      startLongitude,
+      targetLatitude,
+      targetLongitude,
+    );
+  }
+
+  static String formatDistanceFromLatLng({
+    required double startLatitude,
+    required double startLongitude,
+    required double targetLatitude,
+    required double targetLongitude,
+  }) {
+    final double meters = calculateDistance(
+      startLatitude: startLatitude,
+      startLongitude: startLongitude,
+      targetLatitude: targetLatitude,
+      targetLongitude: targetLongitude,
+    );
+
+    if (meters < 1000) {
+      return '${meters.round()} m away';
+    }
+
+    final double km = meters / 1000;
+    return '${km.toStringAsFixed(1)} km away';
   }
 
   static Future<String> formatDistanceFromCurrentLocation({

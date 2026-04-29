@@ -2,15 +2,15 @@ import 'package:yallakhadra/features/reports/domain/entities/nearby_reports_page
 import 'package:yallakhadra/features/reports/domain/repositories/reports_repository.dart';
 
 class GetNearbyReportsParams {
-  final double latitude;
-  final double longitude;
+  final double? latitude;
+  final double? longitude;
   final double? radiusInKm;
   final int pageNumber;
   final int pageSize;
 
   const GetNearbyReportsParams({
-    required this.latitude,
-    required this.longitude,
+    this.latitude,
+    this.longitude,
     this.radiusInKm,
     required this.pageNumber,
     required this.pageSize,

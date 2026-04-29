@@ -14,8 +14,8 @@ class ReportsRepositoryImpl implements ReportsRepository {
 
   @override
   Future<NearbyReportsPageEntity> getNearbyReports({
-    required double latitude,
-    required double longitude,
+    double? latitude,
+    double? longitude,
     double? radiusInKm,
     required int pageNumber,
     required int pageSize,

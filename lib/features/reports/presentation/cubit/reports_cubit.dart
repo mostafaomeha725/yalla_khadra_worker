@@ -1,19 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yallakhadra/core/helpers/helpers.dart';
 import 'package:yallakhadra/features/reports/domain/usecases/get_nearby_reports_use_case.dart';
 import 'package:yallakhadra/features/reports/presentation/cubit/reports_state.dart';
 
 class ReportsCubit extends Cubit<ReportsState> {
   final GetNearbyReportsUseCase _getNearbyReportsUseCase;
   final bool useRadiusByDefault;
-  final double latitude;
-  final double longitude;
+  double? latitude;
+  double? longitude;
 
-  ReportsCubit(
-    this._getNearbyReportsUseCase, {
-    this.useRadiusByDefault = true,
-    this.latitude = 30.0444,
-    this.longitude = 31.2357,
-  }) : super(const ReportsInitial());
+  ReportsCubit(this._getNearbyReportsUseCase, {this.useRadiusByDefault = true})
+    : super(const ReportsInitial());
   static const int _pageSize = 10;
 
   int _currentPage = 1;
@@ -23,6 +20,14 @@ class ReportsCubit extends Cubit<ReportsState> {
     emit(const ReportsLoading());
 
     try {
+      if (latitude == null || longitude == null) {
+        final position = await Helpers.getUserLocation();
+        if (position != null) {
+          latitude = position.latitude;
+          longitude = position.longitude;
+        }
+      }
+
       _radiusInKm = radiusInKm;
       final page = await _getNearbyReportsUseCase(
         GetNearbyReportsParams(
