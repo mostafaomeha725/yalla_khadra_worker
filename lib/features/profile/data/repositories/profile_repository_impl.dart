@@ -25,14 +25,18 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
     final result = await _remoteDataSource.logout(refreshToken: refreshToken);
 
-    return result.fold((Failure failure) => Left(failure), (
-      String message,
-    ) async {
-      await _preferencesStorage.deleteUserToken();
-      await _preferencesStorage.deleteRefreshToken();
-      await _preferencesStorage.clearUserProfile();
-      return Right(message);
-    });
+    // Completely clear user data locally regardless of API success or failure,
+    // to ensure the user is not stuck if the token is expired or network is down.
+    await _preferencesStorage.deleteUserToken();
+    await _preferencesStorage.deleteRefreshToken();
+    await _preferencesStorage.clearUserProfile();
+
+    return result.fold(
+      (Failure failure) => const Right(
+        'Logged out successfully.',
+      ), // Ignore server errors like token expiration
+      (String message) => Right(message),
+    );
   }
 
   @override

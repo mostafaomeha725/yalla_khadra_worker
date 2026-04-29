@@ -97,6 +97,8 @@ class PreferencesStorage {
     await removeString(key: PreferencesKeys.lastName);
     await removeString(key: PreferencesKeys.name);
     await removeString(key: PreferencesKeys.email);
+    await removeString(key: PreferencesKeys.phone);
+    await removeString(key: PreferencesKeys.picture);
   }
 
   /// ================= LANGUAGE =================

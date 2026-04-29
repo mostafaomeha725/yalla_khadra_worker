@@ -59,9 +59,7 @@ class AuthRepositoryImpl implements AuthRepository {
         await _preferencesStorage.deleteUserToken();
         await _preferencesStorage.deleteRefreshToken();
         await _preferencesStorage.clearUserProfile();
-        return const Left(
-          ServerFailure(message: 'This account is not a worker account.'),
-        );
+        return const Left(ServerFailure(message: 'Invalid Email or password'));
       }
 
       await _preferencesStorage.saveUserToken(authModel.accessToken);
