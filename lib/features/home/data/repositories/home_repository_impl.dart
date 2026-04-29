@@ -83,6 +83,7 @@ class HomeRepositoryImpl implements HomeRepository {
       currentCleanups: currentCleanupEntities,
       nearbyReports: [
         const HomeNearbyReportEntity(
+          id: 0,
           title: 'Al Wahda Street, near',
           distance: '0.8 km',
           timeAgo: '2 hours ago',
@@ -91,6 +92,7 @@ class HomeRepositoryImpl implements HomeRepository {
               'https://images.pexels.com/photos/3735657/pexels-photo-3735657.jpeg?auto=compress&cs=tinysrgb&w=600',
         ),
         const HomeNearbyReportEntity(
+          id: 0,
           title: 'Khalifa Park, East Entrance',
           distance: '1.2 km',
           timeAgo: '3 hours ago',
@@ -99,6 +101,7 @@ class HomeRepositoryImpl implements HomeRepository {
               'https://images.pexels.com/photos/48195/document-agreement-documents-sign-48195.jpeg?auto=compress&cs=tinysrgb&w=600',
         ),
         const HomeNearbyReportEntity(
+          id: 0,
           title: 'Marina Beach Area',
           distance: '2.5 km',
           timeAgo: '5 hours ago',

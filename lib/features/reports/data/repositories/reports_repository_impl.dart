@@ -33,4 +33,14 @@ class ReportsRepositoryImpl implements ReportsRepository {
       (model) => model.toEntity(),
     );
   }
+
+  @override
+  Future<String> assignReport(int reportId) async {
+    final result = await _remoteDataSource.assignReport(reportId);
+
+    return result.fold(
+      (failure) => throw Exception(failure.message),
+      (message) => message,
+    );
+  }
 }

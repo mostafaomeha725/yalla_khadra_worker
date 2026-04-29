@@ -67,6 +67,10 @@ class ReportsCubit extends Cubit<ReportsState> {
     await loadReports(pageNumber: 1, radiusInKm: parsed);
   }
 
+  Future<void> refreshReports() async {
+    await loadReports(pageNumber: _currentPage, radiusInKm: _radiusInKm);
+  }
+
   Future<void> loadNextPage() async {
     final ReportsState current = state;
     if (current is! ReportsLoaded || !current.page.hasNextPage) {

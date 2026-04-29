@@ -36,6 +36,7 @@ class EndPoints {
   static const String cleanupTaskMyUncompletedTasks =
       '/CleanupTask/my-uncompleted-tasks';
   static const String cleanupTaskComplete = '/CleanupTask/complete';
+  static const String assignCleanupTask = '/CleanupTask/assign';
   static const String cleanupTaskMyWorkOverview =
       '/CleanupTask/my-work-overview';
   static const String wasteReportMyWork = '/WasteReport/my-work';

@@ -8,6 +8,7 @@ import 'package:yallakhadra/core/helpers/helpers.dart';
 import 'package:yallakhadra/core/theme/styles.dart';
 import 'package:yallakhadra/core/utils/spacing.dart';
 import 'package:yallakhadra/core/widgets/custom_text.dart';
+import 'package:yallakhadra/features/home/presentation/cubit/home_cubit.dart';
 import 'package:yallakhadra/features/home/domain/entities/home_nearby_report_entity.dart';
 import 'package:yallakhadra/features/reports/domain/entities/nearby_report_entity.dart';
 import 'package:yallakhadra/features/reports/presentation/cubit/reports_cubit.dart';
@@ -60,10 +61,11 @@ class ReportsListSection extends StatelessWidget {
           distance: distanceText,
           timeAgo: Helpers.formatReportDate(report.createdAt),
           wasteType: wasteType.label,
-          onPressed: () {
-            context.push(
+          onPressed: () async {
+            final result = await context.push<bool>(
               Routes.homeReportDetailsScreen,
               extra: HomeNearbyReportEntity(
+                id: report.id,
                 title: report.address,
                 distance: distanceText,
                 timeAgo: Helpers.formatReportDate(report.createdAt),
@@ -72,6 +74,14 @@ class ReportsListSection extends StatelessWidget {
                 imageUrls: report.imageUrls,
               ),
             );
+
+            if (result == true && context.mounted) {
+              context.read<ReportsCubit>().refreshReports();
+              try {
+                // If this is wrapped in a Home tree, reload the dashboard too
+                context.read<HomeCubit>().loadDashboard();
+              } catch (_) {}
+            }
           },
         );
 

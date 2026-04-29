@@ -52,6 +52,7 @@ class _HomeCurrentCleanupBodyState extends State<HomeCurrentCleanupBody> {
         ? widget.task.title
         : widget.task.locationQuery;
     final HomeNearbyReportEntity report = HomeNearbyReportEntity(
+      id: 0,
       title: '${widget.task.title} ${widget.task.subTitle}',
       distance: widget.task.distance.replaceAll(' away', ''),
       timeAgo: widget.task.timeAgo.replaceFirst('Taken ', ''),

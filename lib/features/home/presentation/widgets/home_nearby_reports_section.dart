@@ -45,6 +45,7 @@ class HomeNearbyReportsSection extends StatelessWidget {
           final List<HomeNearbyReportEntity> reports = loaded.page.reports
               .map(
                 (report) => HomeNearbyReportEntity(
+                  id: report.id,
                   title: report.address,
                   distance: '',
                   timeAgo: Helpers.formatReportDate(report.createdAt),
@@ -122,6 +123,7 @@ class HomeNearbyReportsSection extends StatelessWidget {
 
                     return HomeNearbyReportCard(
                       report: HomeNearbyReportEntity(
+                        id: report.id,
                         title: report.title,
                         distance: distanceText,
                         timeAgo: report.timeAgo,

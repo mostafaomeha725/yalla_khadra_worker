@@ -9,6 +9,10 @@ import 'package:yallakhadra/core/widgets/bouncing_widgets.dart';
 import 'package:yallakhadra/core/widgets/custom_text.dart';
 import 'package:yallakhadra/features/home/domain/entities/home_nearby_report_entity.dart';
 import 'package:yallakhadra/features/home/presentation/widgets/home_info_row.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yallakhadra/features/reports/presentation/cubit/reports_cubit.dart';
+
+import 'package:yallakhadra/features/home/presentation/cubit/home_cubit.dart';
 
 class HomeNearbyReportCard extends StatelessWidget {
   final HomeNearbyReportEntity report;
@@ -18,8 +22,19 @@ class HomeNearbyReportCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BounceIt(
-      onPressed: () {
-        context.push(Routes.homeReportDetailsScreen, extra: report);
+      onPressed: () async {
+        final result = await context.push<bool>(
+          Routes.homeReportDetailsScreen,
+          extra: report,
+        );
+        if (result == true && context.mounted) {
+          context.read<ReportsCubit>().refreshReports();
+          try {
+            context.read<HomeCubit>().loadDashboard();
+          } catch (_) {
+            // HomeCubit might not be available depending on the screen, ignore.
+          }
+        }
       },
       child: Container(
         width: double.infinity,

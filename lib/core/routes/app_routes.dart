@@ -121,6 +121,7 @@ GoRouter createRouter() {
               state.extra is HomeNearbyReportEntity
               ? state.extra as HomeNearbyReportEntity
               : const HomeNearbyReportEntity(
+                  id: 0,
                   title: 'Al Wahda Street, near City Mall',
                   distance: '0.8 km',
                   timeAgo: '2 hours ago',

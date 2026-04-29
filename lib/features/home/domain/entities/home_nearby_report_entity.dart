@@ -1,4 +1,5 @@
 class HomeNearbyReportEntity {
+  final int id;
   final String title;
   final String distance;
   final String timeAgo;
@@ -7,6 +8,7 @@ class HomeNearbyReportEntity {
   final List<String> imageUrls;
 
   const HomeNearbyReportEntity({
+    required this.id,
     required this.title,
     required this.distance,
     required this.timeAgo,

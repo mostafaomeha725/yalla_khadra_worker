@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Decorations {
-  static topRoundedContainer() => BoxDecoration(
+  static BoxDecoration topRoundedContainer() => BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(20.sp),

@@ -8,4 +8,6 @@ abstract class ReportsRepository {
     required int pageNumber,
     required int pageSize,
   });
+
+  Future<String> assignReport(int reportId);
 }

@@ -10,4 +10,6 @@ abstract class ReportsRemoteDataSource {
     required int pageNumber,
     required int pageSize,
   });
+
+  Future<Either<Failure, String>> assignReport(int reportId);
 }
