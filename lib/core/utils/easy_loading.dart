@@ -1,39 +1,33 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'dart:math';
 
-/// ===============================
-/// 🔥 INTERNAL LOADER SYSTEM
-/// ===============================
+// ─────────────────────────────────────────
+// App Loader
+// ─────────────────────────────────────────
+
 class _AppLoader {
   _AppLoader._();
-
   static final _AppLoader instance = _AppLoader._();
-
   bool _isShowing = false;
 
   void show({
     String? message,
     bool blockUI = true,
-    EasyLoadingMaskType? maskType,
+    EasyLoadingMaskType maskType = EasyLoadingMaskType.black,
   }) {
     if (_isShowing) return;
-
     _isShowing = true;
-
     EasyLoading.instance.userInteractions = !blockUI;
-
     EasyLoading.show(
       status: message,
-      maskType:
-          maskType ??
-          (blockUI ? EasyLoadingMaskType.black : EasyLoadingMaskType.none),
+      maskType: maskType,
+      indicator: const _MorphLoader(),
     );
   }
 
   void hide() {
     if (!_isShowing) return;
-
     _isShowing = false;
     EasyLoading.dismiss();
   }
@@ -72,26 +66,31 @@ class _AppLoader {
   }
 }
 
-/// ===============================
-/// 🎨 CUSTOM WAVE LOADER
-/// ===============================
-class WaveLoader extends StatefulWidget {
-  const WaveLoader({super.key});
+// ─────────────────────────────────────────
+// Morph Loader (Apple style)
+// ─────────────────────────────────────────
+
+class _MorphLoader extends StatefulWidget {
+  const _MorphLoader();
 
   @override
-  State<WaveLoader> createState() => _WaveLoaderState();
+  State<_MorphLoader> createState() => _MorphLoaderState();
 }
 
-class _WaveLoaderState extends State<WaveLoader>
+class _MorphLoaderState extends State<_MorphLoader>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+  late final AnimationController _controller;
+
+  static const int _segments = 8;
+  static const double _orbitRadius = 18;
+  static const double _dotMaxRadius = 3.5;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(milliseconds: 1200),
     )..repeat();
   }
 
@@ -104,80 +103,95 @@ class _WaveLoaderState extends State<WaveLoader>
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 80,
-      height: 80,
+      width: 48,
+      height: 48,
       child: AnimatedBuilder(
         animation: _controller,
         builder: (_, __) {
-          return CustomPaint(painter: _WavePainter(_controller.value));
+          return CustomPaint(
+            painter: _MorphPainter(
+              progress: _controller.value,
+              segments: _segments,
+              orbitRadius: _orbitRadius,
+              dotMaxRadius: _dotMaxRadius,
+            ),
+          );
         },
       ),
     );
   }
 }
 
-class _WavePainter extends CustomPainter {
-  final double progress;
+class _MorphPainter extends CustomPainter {
+  const _MorphPainter({
+    required this.progress,
+    required this.segments,
+    required this.orbitRadius,
+    required this.dotMaxRadius,
+  });
 
-  _WavePainter(this.progress);
+  final double progress;
+  final int segments;
+  final double orbitRadius;
+  final double dotMaxRadius;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final center = size.center(Offset.zero);
-    final radius = size.width / 2;
+    final double cx = size.width / 2;
+    final double cy = size.height / 2;
+    final double t = progress * pi * 2;
 
-    /// 🟢 الخلفية
-    final bgPaint = Paint()
-      ..color = const Color(0xFF1ED4B5)
-      ..style = PaintingStyle.fill;
+    final Paint paint = Paint()..style = PaintingStyle.fill;
 
-    canvas.drawCircle(center, radius, bgPaint);
+    for (int i = 0; i < segments; i++) {
+      final double angle = (i / segments) * pi * 2 + t * 1.2;
+      final double phase = (t * 1.5 + i * 0.8) % (pi * 2);
 
-    /// ⚪ الخط المتحرك (wave arc)
-    final paint = Paint()
-      ..color = Colors.white
-      ..strokeWidth = 6
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
+      final double alpha = 0.15 + 0.85 * (0.5 + 0.5 * sin(phase));
+      final double dotRadius = dotMaxRadius * (0.5 + 0.5 * sin(phase).abs());
 
-    final startAngle = progress * 2 * pi;
-    final sweepAngle = pi / 1.8;
+      final double x = cx + orbitRadius * cos(angle);
+      final double y = cy + orbitRadius * sin(angle);
 
-    final rect = Rect.fromCircle(center: center, radius: radius - 10);
+      paint.color = Colors.white.withValues(alpha: alpha);
+      canvas.drawCircle(Offset(x, y), dotRadius, paint);
+    }
 
-    canvas.drawArc(rect, startAngle, sweepAngle, false, paint);
+    // Center dot
+    final double centerAlpha = 0.3 + 0.4 * sin(t * 2);
+    paint.color = Colors.white.withValues(alpha: centerAlpha);
+    canvas.drawCircle(Offset(cx, cy), 3, paint);
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+  bool shouldRepaint(_MorphPainter old) => old.progress != progress;
 }
 
-/// ===============================
-/// 🎨 CONFIG (CUSTOM LOADER)
-/// ===============================
+// ─────────────────────────────────────────
+// Config
+// ─────────────────────────────────────────
+
 void configureEasyLoading() {
   EasyLoading.instance
-    ..displayDuration = const Duration(milliseconds: 1200)
+    ..displayDuration = const Duration(milliseconds: 1500)
     ..loadingStyle = EasyLoadingStyle.custom
-    ..indicatorSize = 100.0
-    ..radius = 24.0
-    /// 🔥 مهم جدًا (يحل المشكلة)
-    ..indicatorColor = Colors.transparent
-    /// 🔥 CUSTOM LOADER
-    ..indicatorWidget = Column(
-      mainAxisSize: MainAxisSize.min,
-      children: const [WaveLoader(), SizedBox(height: 16)],
-    )
-    ..backgroundColor = Colors.transparent
-    ..textColor = Colors.white
-    ..maskColor = Colors.black.withOpacity(0.4)
+    ..indicatorSize = 52.0
+    ..radius = 18.0
+    ..backgroundColor = const Color(0xFF111111)
+    ..indicatorColor = Colors.white
+    ..textColor = Colors.white70
+    ..maskColor = Colors.black.withValues(alpha: 0.6)
     ..userInteractions = false
     ..dismissOnTap = false;
 }
 
+// ─────────────────────────────────────────
+// Public API
+// ─────────────────────────────────────────
+
 void showLoading({
-  EasyLoadingMaskType maskType = EasyLoadingMaskType.clear,
-  bool userInteractions = true,
+  EasyLoadingMaskType maskType = EasyLoadingMaskType.black,
+  bool userInteractions = false,
   String? status,
 }) {
   _AppLoader.instance.show(
@@ -187,33 +201,27 @@ void showLoading({
   );
 }
 
-void hideLoading() {
-  _AppLoader.instance.hide();
-}
+void hideLoading() => _AppLoader.instance.hide();
 
 void showError(
   String message, [
-  EasyLoadingMaskType? maskType = EasyLoadingMaskType.black,
-  bool dismissOnTap = true,
+  EasyLoadingMaskType maskType = EasyLoadingMaskType.black,
 ]) {
-  _AppLoader.instance.error(
-    message,
-    maskType: maskType ?? EasyLoadingMaskType.black,
-  );
+  _AppLoader.instance.error(message, maskType: maskType);
 }
 
-void showSuccess(String message, [EasyLoadingMaskType? maskType]) {
-  _AppLoader.instance.success(
-    message,
-    maskType: maskType ?? EasyLoadingMaskType.black,
-  );
+void showSuccess(
+  String message, [
+  EasyLoadingMaskType maskType = EasyLoadingMaskType.black,
+]) {
+  _AppLoader.instance.success(message, maskType: maskType);
 }
 
-void showInfo(String message, [EasyLoadingMaskType? maskType]) {
-  _AppLoader.instance.info(
-    message,
-    maskType: maskType ?? EasyLoadingMaskType.black,
-  );
+void showInfo(
+  String message, [
+  EasyLoadingMaskType maskType = EasyLoadingMaskType.black,
+]) {
+  _AppLoader.instance.info(message, maskType: maskType);
 }
 
 void showProgress(double value, {String? status}) {

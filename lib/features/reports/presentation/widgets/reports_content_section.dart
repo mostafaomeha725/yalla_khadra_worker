@@ -5,7 +5,6 @@ import 'package:yallakhadra/core/theme/light_colors.dart';
 import 'package:yallakhadra/core/utils/spacing.dart';
 import 'package:yallakhadra/core/utils/easy_loading.dart';
 import 'package:yallakhadra/core/widgets/app_brand_header.dart';
-import 'package:yallakhadra/core/widgets/custom_loading.dart';
 import 'package:yallakhadra/features/reports/presentation/cubit/reports_cubit.dart';
 import 'package:yallakhadra/features/reports/presentation/cubit/reports_state.dart';
 import 'package:yallakhadra/features/reports/presentation/widgets/reports_filter_card.dart';
@@ -53,18 +52,20 @@ class _ReportsContentSectionState extends State<ReportsContentSection> {
                 padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 120.h),
                 child: BlocConsumer<ReportsCubit, ReportsState>(
                   listener: (context, state) {
-                    if (!isApplyingFilter) {
-                      return;
-                    }
-
                     if (state is ReportsLoading) {
-                      showLoading(status: 'Applying filter...');
+                      if (isApplyingFilter) {
+                        showLoading(status: 'Applying filter...');
+                      } else {
+                        showLoading();
+                      }
                     }
 
                     if (state is ReportsLoaded) {
                       hideLoading();
-                      showSuccess('Filter applied successfully');
-                      isApplyingFilter = false;
+                      if (isApplyingFilter) {
+                        showSuccess('Filter applied successfully');
+                        isApplyingFilter = false;
+                      }
                     }
 
                     if (state is ReportsError) {
@@ -80,7 +81,10 @@ class _ReportsContentSectionState extends State<ReportsContentSection> {
 
                     if ((state is ReportsLoading || state is ReportsInitial) &&
                         lastLoadedState == null) {
-                      return CustomLoading.showLoader();
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        showLoading();
+                      });
+                      return const SizedBox();
                     }
 
                     final ReportsLoaded? loadedState = state is ReportsLoaded

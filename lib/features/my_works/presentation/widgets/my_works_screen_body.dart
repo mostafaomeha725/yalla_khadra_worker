@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yallakhadra/core/theme/light_colors.dart';
+import 'package:yallakhadra/core/utils/easy_loading.dart';
 import 'package:yallakhadra/core/widgets/app_brand_header.dart';
-import 'package:yallakhadra/core/widgets/custom_loading.dart';
 import 'package:yallakhadra/features/my_works/presentation/cubit/my_work_overview/my_work_overview_cubit.dart';
 import 'package:yallakhadra/features/my_works/presentation/cubit/my_work_overview/my_work_overview_state.dart';
 import 'package:yallakhadra/features/my_works/presentation/widgets/my_works_content_section.dart';
@@ -21,11 +21,26 @@ class MyWorksScreenBody extends StatelessWidget {
           children: [
             const AppBrandHeader(),
             Expanded(
-              child: BlocBuilder<MyWorkOverviewCubit, MyWorkOverviewState>(
+              child: BlocConsumer<MyWorkOverviewCubit, MyWorkOverviewState>(
+                listener: (context, state) {
+                  if (state is MyWorkOverviewLoading ||
+                      state is MyWorkOverviewInitial) {
+                    showLoading();
+                  } else {
+                    hideLoading();
+                  }
+
+                  if (state is MyWorkOverviewError) {
+                    showError(state.message);
+                  }
+                },
                 builder: (context, state) {
                   if (state is MyWorkOverviewInitial ||
                       state is MyWorkOverviewLoading) {
-                    return CustomLoading.showLoader();
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      showLoading();
+                    });
+                    return const SizedBox();
                   }
 
                   if (state is MyWorkOverviewLoaded) {
