@@ -61,6 +61,8 @@ class ProfileStrings {
   static const String passwordRuleLowerCase = '1 lower-case';
 
   static const String submitButton = 'Change Password';
+  static const String editProfileButton = 'Edit Profile';
+  static const String cancelEditButton = 'Cancel Edit';
   static const String saveChangesButton = 'Save Changes';
   static const String profileAvatarHint =
       'Click the camera icon to update your profile picture';
