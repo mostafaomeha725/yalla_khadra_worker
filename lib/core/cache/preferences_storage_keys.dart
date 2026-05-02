@@ -9,6 +9,7 @@ enum PreferencesKeys {
   picture,
   email,
   phone,
+  address,
   userToken,
   refreshToken,
 }

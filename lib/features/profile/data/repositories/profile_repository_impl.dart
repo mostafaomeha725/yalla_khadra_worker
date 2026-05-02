@@ -1,8 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:yallakhadra/core/cache/preferences_storage.dart';
+import 'package:yallakhadra/core/cache/preferences_storage_keys.dart';
 import 'package:yallakhadra/core/error/failure.dart';
 import 'package:yallakhadra/features/profile/data/data_sources/profile_remote_data_source.dart';
 import 'package:yallakhadra/features/profile/domain/entities/change_password_entity.dart';
+import 'package:yallakhadra/features/profile/domain/entities/update_profile_entity.dart';
 import 'package:yallakhadra/features/profile/domain/repositories/profile_repository.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
@@ -55,5 +57,44 @@ class ProfileRepositoryImpl implements ProfileRepository {
       (Failure failure) => Left(failure),
       (model) => Right(model.toEntity()),
     );
+  }
+
+  @override
+  Future<Either<Failure, UpdateProfileEntity>> updateProfile({
+    required int userId,
+    required String firstName,
+    required String lastName,
+    required String address,
+    required String phoneNumber,
+    String? profileImagePath,
+  }) async {
+    final result = await _remoteDataSource.updateProfile(
+      userId: userId,
+      firstName: firstName,
+      lastName: lastName,
+      address: address,
+      phoneNumber: phoneNumber,
+      profileImagePath: profileImagePath,
+    );
+
+    return result.fold((Failure failure) => Left(failure), (model) async {
+      await _preferencesStorage.saveUserProfile(
+        firstName: firstName,
+        lastName: lastName,
+        email: _preferencesStorage.getEmail(),
+      );
+      await _preferencesStorage.putString(
+        key: PreferencesKeys.phone,
+        value: phoneNumber,
+      );
+      await _preferencesStorage.saveAddress(address);
+      if (profileImagePath != null && profileImagePath.trim().isNotEmpty) {
+        await _preferencesStorage.putString(
+          key: PreferencesKeys.picture,
+          value: profileImagePath,
+        );
+      }
+      return Right(model.toEntity());
+    });
   }
 }

@@ -1,9 +1,11 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:yallakhadra/core/error/failure.dart';
 import 'package:yallakhadra/core/network/endpoints.dart';
 import 'package:yallakhadra/core/network/network_service.dart';
 import 'package:yallakhadra/features/profile/data/data_sources/profile_remote_data_source.dart';
 import 'package:yallakhadra/features/profile/data/models/change_password_model.dart';
+import 'package:yallakhadra/features/profile/data/models/update_profile_model.dart';
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   final NetworkService _networkService;
@@ -98,5 +100,81 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         return Right(model);
       },
     );
+  }
+
+  @override
+  Future<Either<Failure, UpdateProfileModel>> updateProfile({
+    required int userId,
+    required String firstName,
+    required String lastName,
+    required String address,
+    required String phoneNumber,
+    String? profileImagePath,
+  }) async {
+    try {
+      final Map<String, dynamic> payload = <String, dynamic>{
+        'FirstName': firstName,
+        'LastName': lastName,
+        'Address': address,
+        'PhoneNumber': phoneNumber,
+      };
+
+      if (profileImagePath != null &&
+          profileImagePath.trim().isNotEmpty &&
+          !profileImagePath.trim().startsWith('http')) {
+        payload['ProfileImage'] = await MultipartFile.fromFile(
+          profileImagePath,
+          filename: _extractFileName(profileImagePath),
+        );
+      }
+
+      final result = await _networkService.patchData(
+        endPoint: '${EndPoints.user}/$userId',
+        data: payload,
+        isRaw: false,
+      );
+
+      return result.fold(
+        (String message) {
+          final String errorMessage = message.trim().isEmpty
+              ? 'Unable to update profile.'
+              : message;
+          return Left(ServerFailure(message: errorMessage));
+        },
+        (dynamic data) {
+          if (data is! Map<String, dynamic>) {
+            return const Left(
+              ServerFailure(message: 'Invalid server response'),
+            );
+          }
+
+          final UpdateProfileModel model = UpdateProfileModel.fromJson(data);
+          if (!model.succeeded) {
+            final String failureMessage = model.errors.isNotEmpty
+                ? model.errors.first
+                : model.message;
+            return Left(
+              ServerFailure(
+                message: failureMessage.isEmpty
+                    ? 'Unable to update profile.'
+                    : failureMessage,
+              ),
+            );
+          }
+
+          return Right(model);
+        },
+      );
+    } catch (_) {
+      return const Left(ServerFailure(message: 'Unable to update profile.'));
+    }
+  }
+
+  String _extractFileName(String path) {
+    final int slashIndex = path.lastIndexOf(RegExp(r'[\\/]'));
+    if (slashIndex == -1 || slashIndex == path.length - 1) {
+      return 'profile_image.jpg';
+    }
+    return path.substring(slashIndex + 1);
   }
 }

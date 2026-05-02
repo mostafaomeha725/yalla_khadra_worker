@@ -30,6 +30,7 @@ class EndPoints {
   static const String profileSetup = 'profile/setup';
   static const String profile = 'profile';
   static const String changePassword = '/Authentication/change-password';
+  static const String user = '/User';
   static const String aiWasteScan = '/AIWasteScan';
   static const String aiWasteScanMy = '/AIWasteScan/my';
   static const String cleanupTaskMainOverview = '/CleanupTask/main-overview';

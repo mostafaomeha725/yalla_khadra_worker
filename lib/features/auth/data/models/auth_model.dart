@@ -8,6 +8,9 @@ class AuthModel {
   final String firstName;
   final String lastName;
   final List<int> roles;
+  final String phoneNumber;
+  final String address;
+  final String profileImageUrl;
 
   const AuthModel({
     required this.accessToken,
@@ -17,6 +20,9 @@ class AuthModel {
     required this.firstName,
     required this.lastName,
     required this.roles,
+    required this.phoneNumber,
+    required this.address,
+    required this.profileImageUrl,
   });
 
   factory AuthModel.fromJson(Map<String, dynamic> json) {
@@ -33,6 +39,9 @@ class AuthModel {
 
     final Map<String, dynamic> userData =
         (data['user'] as Map<String, dynamic>?) ?? <String, dynamic>{};
+    final Map<String, dynamic> profileImageData =
+        (userData['profileImage'] as Map<String, dynamic>?) ??
+        <String, dynamic>{};
 
     return AuthModel(
       accessToken: data['accessToken'] as String? ?? '',
@@ -48,6 +57,9 @@ class AuthModel {
           .whereType<num>()
           .map((num role) => role.toInt())
           .toList(growable: false),
+      phoneNumber: (userData['phoneNumber'] as String? ?? '').trim(),
+      address: (userData['address'] as String? ?? '').trim(),
+      profileImageUrl: (profileImageData['url'] as String? ?? '').trim(),
     );
   }
 
@@ -60,6 +72,9 @@ class AuthModel {
       'firstName': firstName,
       'lastName': lastName,
       'roles': roles,
+      'phoneNumber': phoneNumber,
+      'address': address,
+      'profileImageUrl': profileImageUrl,
     };
   }
 
@@ -72,6 +87,9 @@ class AuthModel {
       firstName: firstName,
       lastName: lastName,
       roles: roles,
+      phoneNumber: phoneNumber,
+      address: address,
+      profileImageUrl: profileImageUrl,
     );
   }
 }

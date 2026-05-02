@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:yallakhadra/core/cache/preferences_storage.dart';
+import 'package:yallakhadra/core/cache/preferences_storage_keys.dart';
 import 'package:yallakhadra/core/error/failure.dart';
 import 'package:yallakhadra/features/auth/data/data_sources/auth_remote_data_source.dart';
 import 'package:yallakhadra/features/auth/domain/entities/auth_entity.dart';
@@ -64,10 +65,20 @@ class AuthRepositoryImpl implements AuthRepository {
 
       await _preferencesStorage.saveUserToken(authModel.accessToken);
       await _preferencesStorage.saveRefreshToken(authModel.refreshToken);
+      await _preferencesStorage.saveUserId(authModel.userId);
       await _preferencesStorage.saveUserProfile(
         firstName: authModel.firstName,
         lastName: authModel.lastName,
         email: authModel.email,
+      );
+      await _preferencesStorage.putString(
+        key: PreferencesKeys.phone,
+        value: authModel.phoneNumber,
+      );
+      await _preferencesStorage.saveAddress(authModel.address);
+      await _preferencesStorage.putString(
+        key: PreferencesKeys.picture,
+        value: authModel.profileImageUrl,
       );
       return Right(authModel.toEntity());
     });

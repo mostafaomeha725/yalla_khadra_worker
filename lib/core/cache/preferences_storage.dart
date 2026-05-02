@@ -99,6 +99,24 @@ class PreferencesStorage {
     await removeString(key: PreferencesKeys.email);
     await removeString(key: PreferencesKeys.phone);
     await removeString(key: PreferencesKeys.picture);
+    await removeString(key: PreferencesKeys.address);
+  }
+
+  Future<void> saveUserId(int id) async {
+    await _preferences.setString(PreferencesKeys.uuid.name, id.toString());
+  }
+
+  int getUserId({int fallback = 3}) {
+    final String? raw = _preferences.getString(PreferencesKeys.uuid.name);
+    return int.tryParse(raw ?? '') ?? fallback;
+  }
+
+  Future<void> saveAddress(String address) async {
+    await _preferences.setString(PreferencesKeys.address.name, address);
+  }
+
+  String getAddress() {
+    return (_preferences.getString(PreferencesKeys.address.name) ?? '').trim();
   }
 
   /// ================= LANGUAGE =================

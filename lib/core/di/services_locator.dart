@@ -26,8 +26,10 @@ import 'package:yallakhadra/features/profile/data/repositories/profile_repositor
 import 'package:yallakhadra/features/profile/domain/repositories/profile_repository.dart';
 import 'package:yallakhadra/features/profile/domain/usecases/change_password_usecase.dart';
 import 'package:yallakhadra/features/profile/domain/usecases/logout_usecase.dart';
+import 'package:yallakhadra/features/profile/domain/usecases/update_profile_usecase.dart';
 import 'package:yallakhadra/features/profile/presentation/cubit/change_password_cubit.dart';
 import 'package:yallakhadra/features/profile/presentation/cubit/profile_logout_cubit.dart';
+import 'package:yallakhadra/features/profile/presentation/cubit/update_profile_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -109,8 +111,10 @@ class ServiceLocator {
     );
     sl.registerLazySingleton(() => ChangePasswordUseCase(sl()));
     sl.registerLazySingleton(() => LogoutUseCase(sl()));
+    sl.registerLazySingleton(() => UpdateProfileUseCase(sl()));
     sl.registerFactory(() => ChangePasswordCubit(sl()));
     sl.registerFactory(() => ProfileLogoutCubit(sl()));
+    sl.registerFactory(() => UpdateProfileCubit(sl()));
   }
 
   // /// =============================
