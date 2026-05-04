@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yallakhadra/core/theme/styles.dart';
 import 'package:yallakhadra/core/widgets/custom_text.dart';
+import 'package:yallakhadra/features/auth/presentation/widgets/logo_header.dart';
 
 class AiScanHeroSection extends StatelessWidget {
   const AiScanHeroSection({super.key});
@@ -13,26 +14,7 @@ class AiScanHeroSection extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child: Column(
         children: [
-          Container(
-            width: 50.w,
-            height: 50.w,
-            decoration: BoxDecoration(
-              color: const Color(0xFF10B981),
-              borderRadius: BorderRadius.circular(10.r),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0x2410B981),
-                  blurRadius: 12,
-                  offset: Offset(0, 5),
-                ),
-              ],
-            ),
-            child: Icon(
-              Icons.autorenew_rounded,
-              size: 24.sp,
-              color: const Color(0xFFFFFFFF),
-            ),
-          ),
+          LogoHeader(size: 68),
           SizedBox(height: 12.h),
           AppText(
             'AI Waste Scanner',

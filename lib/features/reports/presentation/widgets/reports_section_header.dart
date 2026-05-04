@@ -14,6 +14,7 @@ class ReportsSectionHeader extends StatelessWidget {
         SizedBox(height: 24.h),
         AppText(
           'Available Reports',
+          textMargin: EdgeInsets.symmetric(horizontal: 4.w),
           style: font28w500.copyWith(
             color: const Color(0xFF111827),
             fontWeight: FontWeight.w700,
@@ -21,6 +22,8 @@ class ReportsSectionHeader extends StatelessWidget {
         ),
         AppText(
           'Choose a task to start cleaning',
+          textMargin: EdgeInsets.symmetric(horizontal: 4.w),
+
           style: font12w500.copyWith(color: const Color(0xFF6B7280)),
         ),
         SizedBox(height: 24.h),
