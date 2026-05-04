@@ -16,6 +16,7 @@ import 'package:yallakhadra/features/profile/presentation/screens/privacy_screen
 import 'package:yallakhadra/features/profile/presentation/screens/profile_screen.dart';
 import 'package:yallakhadra/features/profile/presentation/screens/update_profile_screen.dart';
 import 'package:yallakhadra/core/widgets/custom_nav_bar.dart';
+import 'package:yallakhadra/features/splash/presentation/screens/splash_screen.dart';
 import '/core/env.dart';
 import 'route_observer.dart';
 import 'route_paths.dart';
@@ -24,7 +25,7 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 final CustomGoRouterObserver customGoRouterObserver = CustomGoRouterObserver();
 
-bool _hasAuthSession() {
+bool hasAuthSession() {
   final PreferencesStorage prefs = sl<PreferencesStorage>();
   final String accessToken = (prefs.getUserToken() ?? '').trim();
   final String refreshToken = (prefs.getRefreshToken() ?? '').trim();
@@ -36,19 +37,22 @@ bool _isAuthRoute(String route) {
       route == Routes.forgetPasswordScreen ||
       route == Routes.otpScreen ||
       route == Routes.newPasswordScreen ||
-      route == Routes.registerScreen;
+      route == Routes.registerScreen ||
+      route == Routes.splashScreen;
 }
 
 GoRouter createRouter() {
   return GoRouter(
-    initialLocation: _hasAuthSession()
-        ? Routes.mainNavigationScreen
-        : Routes.loginScreen,
+    initialLocation: Routes.splashScreen,
     navigatorKey: navigatorKey,
     debugLogDiagnostics: true,
     redirect: (BuildContext context, GoRouterState state) {
-      final bool authenticated = _hasAuthSession();
+      final bool authenticated = hasAuthSession();
       final String location = state.matchedLocation;
+
+      if (location == Routes.splashScreen) {
+        return null;
+      }
 
       if (!authenticated && !_isAuthRoute(location)) {
         return Routes.loginScreen;
@@ -65,6 +69,10 @@ GoRouter createRouter() {
       // customGoRouterObserver,
     ],
     routes: [
+      GoRoute(
+        path: Routes.splashScreen,
+        builder: (context, state) => const SplashScreen(),
+      ),
       GoRoute(
         path: Routes.loginScreen,
         builder: (context, state) => const LoginScreen(),
