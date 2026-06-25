@@ -32,7 +32,21 @@ class Helpers {
       return null;
     }
 
-    return await Geolocator.getCurrentPosition();
+    Position? position = await Geolocator.getLastKnownPosition();
+    if (position != null) {
+      return position;
+    }
+
+    try {
+      return await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.low,
+          timeLimit: Duration(seconds: 5),
+        ),
+      );
+    } catch (_) {
+      return null;
+    }
   }
 
   static String formatReportDate(String dateTimeString) {
@@ -133,7 +147,20 @@ class Helpers {
       return 'Location permission required';
     }
 
-    final Position position = await Geolocator.getCurrentPosition();
+    Position? position = await Geolocator.getLastKnownPosition();
+    if (position == null) {
+      try {
+        position = await Geolocator.getCurrentPosition(
+          locationSettings: const LocationSettings(
+            accuracy: LocationAccuracy.low,
+            timeLimit: Duration(seconds: 5),
+          ),
+        );
+      } catch (_) {
+        return 'Location unavailable';
+      }
+    }
+
     final double meters = Geolocator.distanceBetween(
       position.latitude,
       position.longitude,

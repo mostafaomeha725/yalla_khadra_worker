@@ -1,5 +1,6 @@
 class AppStrings {
-  static const String baseUrl = 'http://localhost:44000/api';
+  static const String baseUrl = 'https://yallakhadra.runasp.net/api';
+  static const String logo = "assets/images/logo (1).png";
   static const String perPage = '10';
   static const String googlePlayUrl = '';
   static const String appStoreUrl = '';

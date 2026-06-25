@@ -1,3 +1,5 @@
+import 'package:yallakhadra/core/enums/waste_type.dart';
+
 class HomeCurrentCleanupTaskModel {
   final int taskId;
   final String address;
@@ -58,27 +60,8 @@ class HomeCurrentCleanupTaskModel {
   }
 
   static String mapWasteTypeName(int value) {
-    switch (value) {
-      case 1:
-        return 'Plastic';
-      case 2:
-        return 'Paper';
-      case 3:
-        return 'Glass';
-      case 4:
-        return 'Metal';
-      case 5:
-        return 'Organic';
-      case 6:
-        return 'Electronic';
-      case 9:
-        return 'Construction';
-      case 10:
-        return 'Textile';
-      case 11:
-        return 'Mixed';
-      default:
-        return 'Unknown';
-    }
+    return WasteType.values
+        .firstWhere((e) => e.value == value, orElse: () => WasteType.trash)
+        .label;
   }
 }

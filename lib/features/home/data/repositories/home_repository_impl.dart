@@ -1,3 +1,4 @@
+import 'package:geolocator/geolocator.dart';
 import 'package:yallakhadra/core/di/services_locator.dart';
 import 'package:yallakhadra/core/helpers/helpers.dart';
 import 'package:yallakhadra/core/network/network_service.dart';
@@ -33,12 +34,23 @@ class HomeRepositoryImpl implements HomeRepository {
           (models) => models,
         );
 
+    Position? userPosition;
+    if (currentCleanups.isNotEmpty) {
+      userPosition = await Helpers.getUserLocation();
+    }
+
     final List<HomeCleanupTaskEntity> currentCleanupEntities = [];
     for (final HomeCurrentCleanupTaskModel item in currentCleanups) {
-      final String distance = await Helpers.formatDistanceFromCurrentLocation(
-        targetLatitude: item.latitude,
-        targetLongitude: item.longitude,
-      );
+      String distance = 'Distance unavailable';
+      if (userPosition != null && item.latitude != 0 && item.longitude != 0) {
+        distance = Helpers.formatDistanceFromLatLng(
+          startLatitude: userPosition.latitude,
+          startLongitude: userPosition.longitude,
+          targetLatitude: item.latitude,
+          targetLongitude: item.longitude,
+        );
+      }
+
       currentCleanupEntities.add(
         HomeCleanupTaskEntity(
           taskId: item.taskId,

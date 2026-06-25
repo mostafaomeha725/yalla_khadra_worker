@@ -43,7 +43,7 @@ class ReportsListSection extends StatelessWidget {
         final NearbyReportEntity report = reports[index];
         final WasteType wasteType = WasteType.values.firstWhere(
           (WasteType item) => item.value == report.wasteType,
-          orElse: () => WasteType.unknown,
+          orElse: () => WasteType.trash,
         );
 
         final String distanceText = (userLat != null && userLng != null)

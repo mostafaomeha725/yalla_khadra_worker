@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yallakhadra/core/constants/app_assets.dart';
 
 class AppAsset extends StatelessWidget {
   const AppAsset({
@@ -20,7 +21,7 @@ class AppAsset extends StatelessWidget {
   Widget build(BuildContext context) {
     String assetPath = assetName;
     if (!assetPath.contains('assets')) {
-      assetPath = "assets/images/$assetPath.png";
+      assetPath = Assets.logo;
     }
     return Image.asset(
       assetPath,

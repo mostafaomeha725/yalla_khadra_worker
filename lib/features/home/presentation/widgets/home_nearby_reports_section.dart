@@ -52,7 +52,7 @@ class HomeNearbyReportsSection extends StatelessWidget {
                   wasteType: WasteType.values
                       .firstWhere(
                         (waste) => waste.value == report.wasteType,
-                        orElse: () => WasteType.unknown,
+                        orElse: () => WasteType.trash,
                       )
                       .label,
                   imageUrl: report.imageUrl,

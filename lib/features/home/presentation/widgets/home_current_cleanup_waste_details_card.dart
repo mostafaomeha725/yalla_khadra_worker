@@ -52,7 +52,6 @@ class HomeCurrentCleanupWasteDetailsCard extends StatelessWidget {
               value: selectedWasteType,
               onChanged: onWasteTypeChanged,
               items: WasteType.values
-                  .where((WasteType item) => item != WasteType.unknown)
                   .map(
                     (WasteType item) => DropdownMenuItem<WasteType>(
                       value: item,
