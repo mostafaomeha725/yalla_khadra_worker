@@ -47,7 +47,7 @@ class MyWorksContentSection extends StatelessWidget {
     final MyWorkReportsPageEntity pageData = reportsPage!;
 
     return SingleChildScrollView(
-      padding: EdgeInsets.fromLTRB(22.w, 12.h, 22.w, 110.h),
+      padding: EdgeInsets.fromLTRB(22.w, 12.h, 22.w, 160.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

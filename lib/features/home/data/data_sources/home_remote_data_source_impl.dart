@@ -134,4 +134,63 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
     }
     return path.substring(slashIndex + 1);
   }
+
+  @override
+  Future<Either<Failure, void>> updateUserLocation({
+    required int userId,
+    required double latitude,
+    required double longitude,
+  }) async {
+    try {
+      final Map<String, dynamic> payload = <String, dynamic>{
+        'Latitude': latitude,
+        'Longitude': longitude,
+      };
+
+      final result = await _networkService.patchData(
+        endPoint: '${EndPoints.user}/$userId',
+        data: payload,
+        isRaw: false,
+      );
+
+      return result.fold(
+        (String message) {
+          final String errorMessage = message.trim().isEmpty
+              ? 'Unable to update location.'
+              : message;
+          return Left(ServerFailure(message: errorMessage));
+        },
+        (dynamic data) {
+          if (data is! Map<String, dynamic>) {
+            return const Left(
+              ServerFailure(message: 'Invalid server response'),
+            );
+          }
+
+          final bool succeeded =
+              (data['succeeded'] as bool?) ??
+              (data['Succeeded'] as bool?) ??
+              (data['statusCode'] as num?) == 200;
+
+          if (!succeeded) {
+            final String failureMessage = HomeMainOverviewModel.extractFailureMessage(
+              data,
+              fallback: 'Unable to update location.',
+            );
+            return Left(
+              ServerFailure(
+                message: failureMessage.isEmpty
+                    ? 'Unable to update location.'
+                    : failureMessage,
+              ),
+            );
+          }
+
+          return const Right(null);
+        },
+      );
+    } catch (_) {
+      return const Left(ServerFailure(message: 'Unable to update location.'));
+    }
+  }
 }

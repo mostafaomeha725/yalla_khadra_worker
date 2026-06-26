@@ -21,21 +21,9 @@ class ReportsContentSection extends StatefulWidget {
 }
 
 class _ReportsContentSectionState extends State<ReportsContentSection> {
-  late final TextEditingController radiusController;
+  String? selectedRadius;
   ReportsLoaded? lastLoadedState;
   bool isApplyingFilter = false;
-
-  @override
-  void initState() {
-    super.initState();
-    radiusController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    radiusController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +37,7 @@ class _ReportsContentSectionState extends State<ReportsContentSection> {
             const Divider(height: 1, color: Color(0xFFE2E8F0)),
             Expanded(
               child: SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 120.h),
+                padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 160.h),
                 child: BlocConsumer<ReportsCubit, ReportsState>(
                   listener: (context, state) {
                     if (state is ReportsLoading) {
@@ -100,11 +88,16 @@ class _ReportsContentSectionState extends State<ReportsContentSection> {
                       children: [
                         const ReportsSectionHeader(),
                         ReportsFilterCard(
-                          radiusController: radiusController,
+                          selectedRadius: selectedRadius,
+                          onRadiusChanged: (String? newValue) {
+                            setState(() {
+                              selectedRadius = newValue;
+                            });
+                          },
                           onApplyPressed: () {
                             isApplyingFilter = true;
                             context.read<ReportsCubit>().applyRadius(
-                              radiusController.text,
+                              selectedRadius ?? '',
                             );
                           },
                         ),

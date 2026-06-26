@@ -4,6 +4,7 @@ import 'package:yallakhadra/core/error/failure.dart';
 import 'package:yallakhadra/core/network/network_service.dart';
 import 'package:yallakhadra/features/my_works/data/data_sources/my_works_remote_data_source.dart';
 import 'package:yallakhadra/features/my_works/data/data_sources/my_works_remote_data_source_impl.dart';
+import 'package:yallakhadra/features/my_works/domain/entities/my_work_details_entity.dart';
 import 'package:yallakhadra/features/my_works/domain/entities/my_work_overview_entity.dart';
 import 'package:yallakhadra/features/my_works/domain/entities/my_work_reports_page_entity.dart';
 import 'package:yallakhadra/features/my_works/domain/repositories/my_works_repository.dart';
@@ -34,6 +35,18 @@ class MyWorksRepositoryImpl implements MyWorksRepository {
       pageNumber: pageNumber,
       pageSize: pageSize,
     );
+
+    return result.fold(
+      (failure) => Left(failure),
+      (model) => Right(model.toEntity()),
+    );
+  }
+
+  @override
+  Future<Either<Failure, MyWorkDetailsEntity>> getCompletedWorkDetails(
+    int id,
+  ) async {
+    final result = await _remoteDataSource.getCompletedWorkDetails(id);
 
     return result.fold(
       (failure) => Left(failure),

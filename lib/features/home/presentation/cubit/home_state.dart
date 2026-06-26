@@ -24,6 +24,21 @@ class HomeError extends HomeState {
   const HomeError(this.message);
 }
 
+/// Permission denied (not first time) – show "Enable Location" button → openAppSettings
+class HomeLocationPermissionDenied extends HomeState {
+  const HomeLocationPermissionDenied();
+}
+
+/// Permission denied forever – show "Open App Settings" button → openAppSettings
+class HomeLocationDeniedForever extends HomeState {
+  const HomeLocationDeniedForever();
+}
+
+/// Permission granted but GPS service is off – show "Turn On Location" → openLocationSettings
+class HomeLocationServiceDisabled extends HomeState {
+  const HomeLocationServiceDisabled();
+}
+
 class HomeCleanupTaskCompleting extends HomeState {
   const HomeCleanupTaskCompleting();
 }

@@ -15,4 +15,5 @@ class Routes {
   static const editProfileScreen = '/edit-profile-screen';
   static const homeReportDetailsScreen = '/home/report-details';
   static const homeCurrentCleanupScreen = '/home/current-cleanup';
+  static const myWorkCompletedDetails = '/my-works/completed-details';
 }

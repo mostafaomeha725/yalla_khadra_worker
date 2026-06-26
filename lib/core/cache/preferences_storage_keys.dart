@@ -12,4 +12,5 @@ enum PreferencesKeys {
   address,
   userToken,
   refreshToken,
+  hasRequestedLocation,
 }

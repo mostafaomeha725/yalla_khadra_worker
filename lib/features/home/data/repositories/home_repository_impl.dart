@@ -1,4 +1,5 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:yallakhadra/core/cache/preferences_storage.dart';
 import 'package:yallakhadra/core/di/services_locator.dart';
 import 'package:yallakhadra/core/helpers/helpers.dart';
 import 'package:yallakhadra/core/network/network_service.dart';
@@ -140,5 +141,23 @@ class HomeRepositoryImpl implements HomeRepository {
     );
 
     result.fold((failure) => throw Exception(failure.message), (_) => null);
+  }
+
+  @override
+  Future<void> updateUserLocation({
+    required double latitude,
+    required double longitude,
+  }) async {
+    final int userId = sl<PreferencesStorage>().getUserId();
+    final result = await _remoteDataSource.updateUserLocation(
+      userId: userId,
+      latitude: latitude,
+      longitude: longitude,
+    );
+
+    result.fold(
+      (failure) => throw Exception(failure.message),
+      (_) => null,
+    );
   }
 }

@@ -6,14 +6,11 @@ import 'package:yallakhadra/core/di/services_locator.dart';
 import 'package:yallakhadra/core/routes/app_routes.dart';
 import 'package:yallakhadra/core/theme/light_colors.dart';
 import 'package:yallakhadra/core/utils/easy_loading.dart';
-
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // final prefs = await SharedPreferences.getInstance();
-  // await prefs.clear(); // يمسح كل الكاش
+  await initializeDateFormatting('en', null);
 
   await ServiceLocator().init();
   configureEasyLoading();
@@ -35,7 +32,7 @@ class Yallakhadra extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp.router(
           builder: EasyLoading.init(),
-          title: 'Default App',
+          title: 'Yalla Khadra Worker',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             scaffoldBackgroundColor: AppLightColors.defaultBackground,

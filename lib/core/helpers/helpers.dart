@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:yallakhadra/core/cache/preferences_storage.dart';
 import 'package:yallakhadra/core/routes/app_routes.dart';
 import 'package:yallakhadra/core/routes/route_paths.dart';
 import 'package:yallakhadra/core/utils/easy_loading.dart';
@@ -47,6 +48,46 @@ class Helpers {
     } catch (_) {
       return null;
     }
+  }
+
+  static Future<void> requestLocationPermissionFirstTime(PreferencesStorage storage) async {
+    final bool hasRequested = storage.getHasRequestedLocation();
+    if (!hasRequested) {
+      await storage.setHasRequestedLocation(true);
+      
+      final bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) return;
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        return;
+      }
+
+      try {
+        await Geolocator.getCurrentPosition(
+          locationSettings: const LocationSettings(
+            accuracy: LocationAccuracy.low,
+            timeLimit: Duration(seconds: 5),
+          ),
+        );
+      } catch (_) {
+        // Just fail silently for the first-time fetch
+      }
+    }
+  }
+
+  static Future<void> handleEnableLocation() async {
+    await Geolocator.openAppSettings();
+  }
+
+  /// Opens the device's Location (GPS) settings, not app settings.
+  static Future<void> handleOpenLocationSettings() async {
+    await Geolocator.openLocationSettings();
   }
 
   static String formatReportDate(String dateTimeString) {

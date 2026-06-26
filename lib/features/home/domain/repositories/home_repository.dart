@@ -9,4 +9,9 @@ abstract class HomeRepository {
     required String finalWeightInKg,
     required List<String> imagePaths,
   });
+
+  Future<void> updateUserLocation({
+    required double latitude,
+    required double longitude,
+  });
 }

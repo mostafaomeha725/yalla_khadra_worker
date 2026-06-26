@@ -13,6 +13,15 @@ import 'package:yallakhadra/features/auth/domain/usecases/request_password_reset
 import 'package:yallakhadra/features/auth/domain/usecases/verify_password_reset_code_usecase.dart';
 import 'package:yallakhadra/features/auth/presentation/cubit/forgot_password/forgot_password_cubit.dart';
 import 'package:yallakhadra/features/auth/presentation/cubit/login/login_cubit.dart';
+import 'package:yallakhadra/features/my_works/data/data_sources/my_works_remote_data_source.dart';
+import 'package:yallakhadra/features/my_works/data/data_sources/my_works_remote_data_source_impl.dart';
+import 'package:yallakhadra/features/my_works/data/repositories/my_works_repository_impl.dart';
+import 'package:yallakhadra/features/my_works/domain/repositories/my_works_repository.dart';
+import 'package:yallakhadra/features/my_works/domain/usecases/get_completed_work_details_use_case.dart';
+import 'package:yallakhadra/features/my_works/domain/usecases/get_my_work_overview_use_case.dart';
+import 'package:yallakhadra/features/my_works/domain/usecases/get_my_work_reports_use_case.dart';
+import 'package:yallakhadra/features/my_works/presentation/cubit/my_work_details/my_work_details_cubit.dart';
+import 'package:yallakhadra/features/my_works/presentation/cubit/my_work_overview/my_work_overview_cubit.dart';
 import 'package:yallakhadra/features/ai_scan/data/data_sources/ai_scan_remote_data_source.dart';
 import 'package:yallakhadra/features/ai_scan/data/data_sources/ai_scan_remote_data_source_impl.dart';
 import 'package:yallakhadra/features/ai_scan/data/repositories/ai_scan_repository_impl.dart';
@@ -43,6 +52,7 @@ class ServiceLocator {
     _initAuth();
     _initAiScan();
     _initProfile();
+    _initMyWorks();
     // _initHome();
   }
 
@@ -115,6 +125,30 @@ class ServiceLocator {
     sl.registerFactory(() => ChangePasswordCubit(sl()));
     sl.registerFactory(() => ProfileLogoutCubit(sl()));
     sl.registerFactory(() => UpdateProfileCubit(sl()));
+  }
+
+  /// =============================
+  /// MY WORKS FEATURE
+  /// =============================
+  void _initMyWorks() {
+    sl.registerLazySingleton<MyWorksRemoteDataSource>(
+      () => MyWorksRemoteDataSourceImpl(sl()),
+    );
+    sl.registerLazySingleton<MyWorksRepository>(
+      () => MyWorksRepositoryImpl(remoteDataSource: sl()),
+    );
+    sl.registerLazySingleton(() => GetMyWorkOverviewUseCase(sl()));
+    sl.registerLazySingleton(() => GetMyWorkReportsUseCase(sl()));
+    sl.registerLazySingleton(() => GetCompletedWorkDetailsUseCase(sl()));
+    sl.registerFactory(
+      () => MyWorkOverviewCubit(
+        sl<GetMyWorkOverviewUseCase>(),
+        sl<GetMyWorkReportsUseCase>(),
+      ),
+    );
+    sl.registerFactory(
+      () => MyWorkDetailsCubit(sl<GetCompletedWorkDetailsUseCase>()),
+    );
   }
 
   // /// =============================

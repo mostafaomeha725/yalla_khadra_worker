@@ -6,22 +6,11 @@ import 'package:yallakhadra/core/utils/app_date_time.dart';
 import 'package:yallakhadra/core/widgets/custom_text.dart';
 import 'package:yallakhadra/features/ai_scan/presentation/cubit/ai_scan/ai_scan_state.dart';
 import 'package:yallakhadra/features/ai_scan/presentation/cubit/ai_scan/ai_scan_cubit.dart';
+import 'package:yallakhadra/features/ai_scan/presentation/widgets/ai_scan_result_dialog.dart';
 import 'package:yallakhadra/features/ai_scan/presentation/widgets/ai_scan_scan_history_card.dart';
 
 class AiScanPreviousScansSection extends StatelessWidget {
   const AiScanPreviousScansSection({super.key});
-
-  String _formatScanTime(String value) {
-    if (value.trim().isEmpty) {
-      return 'Just now';
-    }
-
-    try {
-      return AppDateTime.timestampToFormatted(value);
-    } catch (_) {
-      return 'Just now';
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +49,7 @@ class AiScanPreviousScansSection extends StatelessWidget {
                   //     ? 'No explanation available.'
                   //     : scan.explanation,
                   // scanId: scan.id,
-                  timeAgo: _formatScanTime(scan.createdAt),
+                  timeAgo: AppDateTime.timestampToFormatted(scan.createdAt),
                   resultText: isRecyclable ? 'Recyclable' : 'Non-recyclable',
                   resultIcon: isRecyclable
                       ? Icons.eco_outlined
@@ -71,6 +60,9 @@ class AiScanPreviousScansSection extends StatelessWidget {
                   resultBackgroundColor: isRecyclable
                       ? const Color(0xFFD1FAE5)
                       : const Color(0xFFFEE2E2),
+                  onTap: () {
+                    AiScanResultDialog.show(context, scan);
+                  },
                 ),
               );
             }),

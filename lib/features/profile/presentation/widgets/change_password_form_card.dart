@@ -96,8 +96,6 @@ class ChangePasswordFormCardState extends State<ChangePasswordFormCard> {
                 controller: newPasswordController,
                 hintText: ProfileStrings.newPasswordHint,
               ),
-              verticalSpacing(10),
-              NewPasswordValidationSteps(controller: newPasswordController),
               verticalSpacing(16),
               AppText(
                 ProfileStrings.confirmPasswordLabel,
@@ -109,6 +107,8 @@ class ChangePasswordFormCardState extends State<ChangePasswordFormCard> {
                 hintText: ProfileStrings.confirmPasswordHint,
                 textInputAction: TextInputAction.done,
               ),
+              verticalSpacing(10),
+              NewPasswordValidationSteps(controller: newPasswordController),
               verticalSpacing(18),
               Stack(
                 alignment: AlignmentDirectional.centerStart,

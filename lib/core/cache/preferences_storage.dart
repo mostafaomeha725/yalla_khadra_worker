@@ -100,6 +100,15 @@ class PreferencesStorage {
     await removeString(key: PreferencesKeys.phone);
     await removeString(key: PreferencesKeys.picture);
     await removeString(key: PreferencesKeys.address);
+    await _preferences.remove(PreferencesKeys.hasRequestedLocation.name);
+  }
+
+  Future<void> setHasRequestedLocation(bool value) async {
+    await putBoolean(key: PreferencesKeys.hasRequestedLocation, value: value);
+  }
+
+  bool getHasRequestedLocation() {
+    return getBoolean(key: PreferencesKeys.hasRequestedLocation, defaultValue: false);
   }
 
   Future<void> saveUserId(int id) async {

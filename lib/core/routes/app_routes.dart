@@ -11,6 +11,7 @@ import 'package:yallakhadra/features/home/domain/entities/home_cleanup_task_enti
 import 'package:yallakhadra/features/home/domain/entities/home_nearby_report_entity.dart';
 import 'package:yallakhadra/features/home/presentation/screens/home_current_cleanup_screen.dart';
 import 'package:yallakhadra/features/home/presentation/screens/home_report_details_screen.dart';
+import 'package:yallakhadra/features/my_works/presentation/screens/my_work_completed_details_screen.dart';
 import 'package:yallakhadra/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:yallakhadra/features/profile/presentation/screens/privacy_screen.dart';
 import 'package:yallakhadra/features/profile/presentation/screens/profile_screen.dart';
@@ -159,6 +160,14 @@ GoRouter createRouter() {
                 );
 
           return HomeCurrentCleanupScreen(task: task);
+        },
+      ),
+      GoRoute(
+        path: Routes.myWorkCompletedDetails,
+        builder: (context, state) {
+          final int reportId =
+              state.extra is int ? state.extra as int : 0;
+          return MyWorkCompletedDetailsScreen(reportId: reportId);
         },
       ),
     ],

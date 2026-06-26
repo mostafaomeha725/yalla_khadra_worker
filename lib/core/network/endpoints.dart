@@ -42,6 +42,7 @@ class EndPoints {
       '/CleanupTask/my-work-overview';
   static const String wasteReportMyWork = '/WasteReport/my-work';
   static const String wasteReportNear = '/WasteReport/near';
+  static const String wasteReport = '/WasteReport';
   static const String currencies = 'currencies';
   static const String savedProperties = 'saved-properties';
 

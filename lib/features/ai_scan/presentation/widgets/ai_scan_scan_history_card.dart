@@ -17,6 +17,7 @@ class AiScanScanHistoryCard extends StatelessWidget {
     required this.resultIcon,
     required this.resultTextColor,
     required this.resultBackgroundColor,
+    this.onTap,
   });
 
   final String imageUrl;
@@ -26,11 +27,12 @@ class AiScanScanHistoryCard extends StatelessWidget {
   final IconData resultIcon;
   final Color resultTextColor;
   final Color resultBackgroundColor;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return BounceIt(
-      onPressed: () {},
+      onPressed: onTap ?? () {},
       child: Container(
         width: double.infinity,
         constraints: BoxConstraints(minHeight: 108.h),

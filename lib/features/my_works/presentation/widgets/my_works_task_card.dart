@@ -13,17 +13,19 @@ class MyWorksTaskCard extends StatelessWidget {
     required this.title,
     required this.time,
     required this.duration,
+    this.onTap,
   });
 
   final String imageUrl;
   final String title;
   final String time;
   final String duration;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return BounceIt(
-      onPressed: () {},
+      onPressed: onTap ?? () {},
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.all(18.w),

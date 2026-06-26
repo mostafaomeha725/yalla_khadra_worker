@@ -15,4 +15,10 @@ abstract class HomeRemoteDataSource {
     required String finalWeightInKg,
     required List<String> imagePaths,
   });
+
+  Future<Either<Failure, void>> updateUserLocation({
+    required int userId,
+    required double latitude,
+    required double longitude,
+  });
 }

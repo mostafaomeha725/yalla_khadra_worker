@@ -55,7 +55,7 @@ class HomeDashboardContent extends StatelessWidget {
           ],
           verticalSpacing(36),
           const HomeNearbyReportsSection(),
-          verticalSpacing(92),
+          verticalSpacing(140),
         ],
       ),
     );
