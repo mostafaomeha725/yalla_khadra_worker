@@ -431,7 +431,7 @@ class Helpers {
                 if (pickedFile != null) {
                   image = File(pickedFile.path);
                 }
-                Navigator.of(context).pop();
+                if (context.mounted) Navigator.of(context).pop();
               },
               child: const Text('gallery'),
             ),
@@ -443,7 +443,7 @@ class Helpers {
                 if (pickedFile != null) {
                   image = File(pickedFile.path);
                 }
-                Navigator.of(context).pop();
+                if (context.mounted) Navigator.of(context).pop();
               },
               child: const Text('camera'),
             ),
@@ -541,6 +541,36 @@ class Helpers {
         );
       },
     );
+  }
+
+  /// Returns (lat, lng) from the given coordinates, or falls back to Cairo.
+  /// Kept here so widget files stay function-free (architecture.md).
+  static (double, double) resolveMapCenter({
+    double? latitude,
+    double? longitude,
+  }) {
+    if (latitude != null && longitude != null) {
+      return (latitude, longitude);
+    }
+    return (30.0444, 31.2357);
+  }
+
+  /// Opens Google Maps using coordinates when available, otherwise by query.
+  static Future<void> openReportInGoogleMaps({
+    required String locationQuery,
+    double? latitude,
+    double? longitude,
+  }) async {
+    if (latitude != null && longitude != null) {
+      final bool opened = await LauncherHelper.launchGoogleMapsCoordinates(
+        latitude: latitude,
+        longitude: longitude,
+        label: locationQuery,
+      );
+      if (!opened) showError('Could not open Google Maps.');
+    } else {
+      await handleOpenGoogleMapsSearch(locationQuery);
+    }
   }
 }
 
@@ -687,12 +717,62 @@ class LauncherHelper {
     }
   }
 
-  static void callPhone({phone}) async {
+  static void callPhone({required String phone}) async {
     await launchUrl(Uri.parse('tel:$phone'));
   }
 
-  static void sendMail(mail) async {
+  static void sendMail(String mail) async {
     await launchUrl(Uri.parse('mailto:$mail'));
+  }
+
+
+  static Future<bool> launchGoogleMapsCoordinates({
+
+    required double latitude,
+    required double longitude,
+    String? label,
+  }) async {
+    final String encodedLabel =
+        label != null ? Uri.encodeComponent(label.trim()) : '';
+
+    final List<Uri> candidates = Platform.isIOS
+        ? <Uri>[
+            Uri.parse(
+              'comgooglemaps://?q=$encodedLabel&center=$latitude,$longitude&zoom=15',
+            ),
+            Uri.parse(
+              'https://maps.apple.com/?q=$encodedLabel&ll=$latitude,$longitude',
+            ),
+            Uri.parse(
+              'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude',
+            ),
+          ]
+        : <Uri>[
+            Uri.parse('geo:$latitude,$longitude?q=$latitude,$longitude($encodedLabel)'),
+            Uri.parse(
+              'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude',
+            ),
+          ];
+
+    for (final Uri uri in candidates) {
+      try {
+        final bool launched = await launchUrl(
+          uri,
+          mode: LaunchMode.externalApplication,
+        );
+        if (launched) return true;
+        if (uri.scheme == 'https' || uri.scheme == 'http') {
+          final bool launchedWithDefault = await launchUrl(
+            uri,
+            mode: LaunchMode.platformDefault,
+          );
+          if (launchedWithDefault) return true;
+        }
+      } catch (e) {
+        log('Maps launch failed for $uri: $e');
+      }
+    }
+    return false;
   }
 
   static Future<bool> launchGoogleMapsSearch({required String query}) async {

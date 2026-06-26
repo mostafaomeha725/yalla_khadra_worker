@@ -6,6 +6,8 @@ class HomeNearbyReportEntity {
   final String wasteType;
   final String imageUrl;
   final List<String> imageUrls;
+  final double latitude;
+  final double longitude;
 
   const HomeNearbyReportEntity({
     required this.id,
@@ -15,5 +17,7 @@ class HomeNearbyReportEntity {
     required this.wasteType,
     required this.imageUrl,
     this.imageUrls = const <String>[],
+    this.latitude = 0,
+    this.longitude = 0,
   });
 }

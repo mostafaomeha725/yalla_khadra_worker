@@ -72,6 +72,8 @@ class ReportsListSection extends StatelessWidget {
                 wasteType: wasteType.label,
                 imageUrl: report.imageUrl,
                 imageUrls: report.imageUrls,
+                latitude: report.latitude,
+                longitude: report.longitude,
               ),
             );
 

@@ -130,6 +130,8 @@ class HomeNearbyReportsSection extends StatelessWidget {
                         wasteType: report.wasteType,
                         imageUrl: report.imageUrl,
                         imageUrls: report.imageUrls,
+                        latitude: apiReport.latitude,
+                        longitude: apiReport.longitude,
                       ),
                     );
                   }).toList(),

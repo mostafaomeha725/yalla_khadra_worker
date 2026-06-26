@@ -4,7 +4,7 @@ import 'package:yallakhadra/core/theme/styles.dart';
 import 'package:yallakhadra/core/widgets/custom_text.dart';
 import 'package:yallakhadra/features/home/domain/entities/home_nearby_report_entity.dart';
 import 'package:yallakhadra/features/home/presentation/widgets/home_report_information_item.dart';
-import 'package:yallakhadra/features/home/presentation/widgets/home_report_location_map_card.dart';
+
 
 class HomeCurrentCleanupLocationDetailsCard extends StatelessWidget {
   final HomeNearbyReportEntity report;
@@ -45,17 +45,6 @@ class HomeCurrentCleanupLocationDetailsCard extends StatelessWidget {
             iconColor: const Color(0xFF64748B),
             label: 'Waste Type',
             value: report.wasteType,
-          ),
-          HomeReportLocationMapCard(
-            locationQuery: locationQuery,
-            title: '',
-            showTitle: false,
-            cardPadding: EdgeInsets.zero,
-            mapHeight: 98.h,
-            actionButtonColor: const Color(0xFF10B981),
-            actionButtonBorderColor: const Color(0xFF10B981),
-            actionTextColor: Colors.white,
-            actionIconColor: Colors.white,
           ),
         ],
       ),

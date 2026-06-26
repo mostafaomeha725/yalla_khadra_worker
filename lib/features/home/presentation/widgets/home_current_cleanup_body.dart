@@ -15,6 +15,7 @@ import 'package:yallakhadra/features/home/domain/entities/home_nearby_report_ent
 import 'package:yallakhadra/features/home/presentation/cubit/home_cubit.dart';
 import 'package:yallakhadra/features/home/presentation/cubit/home_state.dart';
 import 'package:yallakhadra/features/home/presentation/widgets/home_current_cleanup_location_details_card.dart';
+import 'package:yallakhadra/features/home/presentation/widgets/home_report_location_map_card.dart';
 import 'package:yallakhadra/features/home/presentation/widgets/home_current_cleanup_upload_proof_card.dart';
 import 'package:yallakhadra/features/home/presentation/widgets/home_current_cleanup_waste_details_card.dart';
 import 'package:yallakhadra/features/home/presentation/widgets/home_report_details_top_bar.dart';
@@ -58,6 +59,8 @@ class _HomeCurrentCleanupBodyState extends State<HomeCurrentCleanupBody> {
       timeAgo: widget.task.timeAgo.replaceFirst('Taken ', ''),
       wasteType: widget.task.wasteType,
       imageUrl: widget.task.imageUrl,
+      latitude: widget.task.latitude,
+      longitude: widget.task.longitude,
     );
 
     return BlocConsumer<HomeCubit, HomeState>(
@@ -101,6 +104,12 @@ class _HomeCurrentCleanupBodyState extends State<HomeCurrentCleanupBody> {
                         HomeCurrentCleanupLocationDetailsCard(
                           report: report,
                           locationQuery: locationQuery,
+                        ),
+                        SizedBox(height: 12.h),
+                        HomeReportLocationMapCard(
+                          locationQuery: locationQuery,
+                          latitude: widget.task.latitude != 0 ? widget.task.latitude : null,
+                          longitude: widget.task.longitude != 0 ? widget.task.longitude : null,
                         ),
                         SizedBox(height: 12.h),
                         HomeCurrentCleanupUploadProofCard(

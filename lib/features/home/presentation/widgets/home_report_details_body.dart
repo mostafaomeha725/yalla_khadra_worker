@@ -43,7 +43,11 @@ class HomeReportDetailsBody extends StatelessWidget {
                     SizedBox(height: 12.h),
                     HomeReportInformationCard(report: report),
                     SizedBox(height: 12.h),
-                    HomeReportLocationMapCard(locationQuery: report.title),
+                    HomeReportLocationMapCard(
+                      locationQuery: report.title,
+                      latitude: report.latitude != 0 ? report.latitude : null,
+                      longitude: report.longitude != 0 ? report.longitude : null,
+                    ),
                     SizedBox(height: 12.h),
                     BlocConsumer<AssignReportCubit, AssignReportState>(
                       listener: (context, state) {
